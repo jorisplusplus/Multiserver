@@ -1,22 +1,23 @@
-package joris.multiserver;
+package joris.multiserver.slave;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import jexxus.client.ClientConnection;
-import joris.multiserver.commands.JoinCommand;
-import joris.multiserver.commands.ReconnectCommand;
-import joris.multiserver.network.SwitchMessage;
-import joris.multiserver.packet.PacketConnected;
-import joris.multiserver.packet.PacketLogin;
-import joris.multiserver.packet.PacketPlayerdata;
-import joris.multiserver.packet.PacketRegistry;
-import joris.multiserver.packet.PacketReqstats;
-import joris.multiserver.packet.PacketSendplayer;
-import joris.multiserver.packet.PacketStats;
-import joris.multiserver.packet.PacketText;
+import joris.multiserver.jexxus.client.ClientConnection;
+import joris.multiserver.slave.commands.JoinCommand;
+import joris.multiserver.slave.commands.ReconnectCommand;
+import joris.multiserver.common.network.SwitchMessage;
+import joris.multiserver.slave.packet.PacketConnected;
+import joris.multiserver.slave.packet.PacketLogin;
+import joris.multiserver.slave.packet.PacketPlayerdata;
+import joris.multiserver.common.PacketRegistry;
+import joris.multiserver.common.SaveHelper;
+import joris.multiserver.slave.packet.PacketReqstats;
+import joris.multiserver.slave.packet.PacketSendplayer;
+import joris.multiserver.slave.packet.PacketStats;
+import joris.multiserver.slave.packet.PacketText;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,8 +38,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = MultiServerSlave.MODID, name = MultiServerSlave.MODID, version = MultiServerSlave.VERSION, acceptableRemoteVersions = "*")
-public class MultiServerSlave {
+@Mod(modid = MSS.MODID, name = MSS.MODID, version = MSS.VERSION, acceptableRemoteVersions = "*")
+public class MSS {
 	public static final String						MODID			= "MultiServer";
 	public static final String						VERSION			= "1.0";
 	public static Logger							logger;
@@ -56,10 +57,11 @@ public class MultiServerSlave {
 	public static HashMap<String, NBTTagCompound>	Injectionlist	= new HashMap();
 	public static HashMap<String, String>			Scheduled		= new HashMap();
 	public static ArrayList<String>					Sync			= new ArrayList();
+	public static SaveHelper						Saver;	
 
 	// The instance of your mod that Forge uses.
 	@Instance(value = MODID)
-	public static MultiServerSlave					instance;
+	public static MSS					instance;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -90,6 +92,7 @@ public class MultiServerSlave {
 
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
+		this.Saver = new SaveHelper();
 		logger = LogManager.getLogger("MultiServer");
 		logger.log(Level.INFO, "Starting tcp on 25566");
 		Events events = new Events();
@@ -99,7 +102,7 @@ public class MultiServerSlave {
 		event.registerServerCommand(new ReconnectCommand());
 		Listener = new TCPListener();
 		TCPClient = new ClientConnection(Listener, IP, PORT, false);
-		MultiServerSlave.connect();
+		MSS.connect();
 	}
 
 	@EventHandler

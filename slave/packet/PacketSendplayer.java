@@ -1,10 +1,12 @@
-package joris.multiserver.packet;
+package joris.multiserver.slave.packet;
 
 import java.util.List;
 
-import jexxus.common.Connection;
-import joris.multiserver.MultiServerSlave;
-import joris.multiserver.network.SwitchMessage;
+import joris.multiserver.jexxus.common.Connection;
+import joris.multiserver.slave.MSS;
+import joris.multiserver.common.Packet;
+import joris.multiserver.common.network.SwitchMessage;
+import joris.multiserver.slave.MSS;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -43,12 +45,12 @@ public class PacketSendplayer extends Packet {
 
 	@Override
 	public void handle() {
-		String target = MultiServerSlave.shouldTransfer(this.uuid);
+		String target = MSS.shouldTransfer(this.uuid);
 		if (target != null) {
 			List<EntityPlayer> playerList = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
 			for (EntityPlayer player : playerList) {
 				if (player.getUniqueID().toString().equals(this.uuid)) {
-					MultiServerSlave.network.sendTo(new SwitchMessage(target), (EntityPlayerMP) player);
+					MSS.network.sendTo(new SwitchMessage(target), (EntityPlayerMP) player);
 				}
 			}
 		}

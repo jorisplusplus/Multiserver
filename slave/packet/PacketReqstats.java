@@ -1,6 +1,8 @@
-package joris.multiserver.packet;
+package joris.multiserver.slave.packet;
 
-import jexxus.common.Connection;
+import joris.multiserver.slave.MSS;
+import joris.multiserver.common.Packet;
+import joris.multiserver.jexxus.common.Connection;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 

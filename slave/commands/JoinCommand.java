@@ -1,10 +1,10 @@
-package joris.multiserver.commands;
+package joris.multiserver.slave.commands;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import joris.multiserver.MultiServerSlave;
+import joris.multiserver.slave.MSS;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -31,10 +31,10 @@ public class JoinCommand extends CommandBase {
 
 	@Override
 	public void processCommand(ICommandSender sender, String[] parameters) {
-		if (MultiServerSlave.TCPClient.isConnected()) {
+		if (MSS.TCPClient.isConnected()) {
 			if (sender instanceof EntityPlayerMP) {
 				try {
-					MultiServerSlave.sendPlayerDataAndReconnect((EntityPlayerMP) sender);
+					MSS.sendPlayerDataAndReconnect((EntityPlayerMP) sender);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

@@ -1,6 +1,6 @@
-package joris.multiserver.commands;
+package joris.multiserver.slave.commands;
 
-import joris.multiserver.MultiServerSlave;
+import joris.multiserver.slave.MSS;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 
@@ -19,10 +19,10 @@ public class ReconnectCommand extends CommandBase {
 
 	@Override
 	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_) {
-		if (MultiServerSlave.TCPClient.isConnected()) {
-			MultiServerSlave.TCPClient.close();
+		if (MSS.TCPClient.isConnected()) {
+			MSS.TCPClient.close();
 		}
-		MultiServerSlave.connect();
+		MSS.connect();
 	}
 
 	/**

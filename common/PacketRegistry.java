@@ -8,7 +8,7 @@ import joris.multiserver.jexxus.common.Connection;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PacketRegistry {
-
+	//test
 	public static HashMap<Integer, Class<? extends Packet>>	classes	= new HashMap<Integer, Class<? extends Packet>>();
 
 	public static void register(Class<? extends Packet> classname, int id) {

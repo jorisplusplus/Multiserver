@@ -1,9 +1,10 @@
-package joris.multiserver;
+package joris.multiserver.slave;
 
 import java.io.IOException;
 
-import joris.multiserver.packet.PacketStats;
-import joris.multiserver.packet.PacketText;
+import joris.multiserver.slave.MSS;
+import joris.multiserver.slave.packet.PacketStats;
+import joris.multiserver.slave.packet.PacketText;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -17,12 +18,12 @@ public class Events {
 
 	@SubscribeEvent
 	public void handleTick(TickEvent.ServerTickEvent clientTickEvent) {
-		if (!MultiServerSlave.TCPClient.isConnected()) {
+		if (!MSS.TCPClient.isConnected()) {
 			// TCP not connected
 			this.ticks++;
 			if (this.ticks == 1200) {
 				this.ticks = 0;
-				MultiServerSlave.connect();
+				MSS.connect();
 			} else {
 				this.ticks = 0;
 			}
@@ -31,15 +32,15 @@ public class Events {
 
 	@SubscribeEvent
 	public void ServerChatEvent(ServerChatEvent event) {
-		MultiServerSlave.TCPClient.send(new PacketText(event.component.getUnformattedText()));
+		MSS.TCPClient.send(new PacketText(event.component.getUnformattedText()));
 	}
 
 	@SubscribeEvent
 	public void PlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
-		MultiServerSlave.TCPClient.send(new PacketStats(MinecraftServer.getServer().getCurrentPlayerCount()));
+		MSS.TCPClient.send(new PacketStats(MinecraftServer.getServer().getCurrentPlayerCount()));
 		// Injection data part
-		if (MultiServerSlave.Injectionlist.containsKey(event.player.getUniqueID().toString())) {
-			NBTTagCompound data = MultiServerSlave.Injectionlist.get((event.player.getUniqueID().toString()));
+		if (MSS.Injectionlist.containsKey(event.player.getUniqueID().toString())) {
+			NBTTagCompound data = MSS.Injectionlist.get((event.player.getUniqueID().toString()));
 			NBTTagCompound player = new NBTTagCompound();
 			event.player.writeToNBT(player);
 			for (Object key : data.func_150296_c()) {
@@ -54,9 +55,9 @@ public class Events {
 
 	@SubscribeEvent
 	public void PlayerLoggedOutEvent(PlayerEvent.PlayerLoggedOutEvent event) {
-		MultiServerSlave.TCPClient.send(new PacketStats(MinecraftServer.getServer().getCurrentPlayerCount()));
+		MSS.TCPClient.send(new PacketStats(MinecraftServer.getServer().getCurrentPlayerCount()));
 		try {
-			MultiServerSlave.sendPlayerData((EntityPlayerMP) event.player, null);
+			MSS.sendPlayerData((EntityPlayerMP) event.player, null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

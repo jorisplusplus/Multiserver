@@ -1,8 +1,10 @@
-package joris.multiserver.packet;
+package joris.multiserver.slave.packet;
 
-import jexxus.common.Connection;
-import joris.multiserver.MultiServerSlave;
-import joris.multiserver.SaveHelper;
+import joris.multiserver.jexxus.common.Connection;
+import joris.multiserver.slave.MSS;
+import joris.multiserver.common.Packet;
+import joris.multiserver.common.SaveHelper;
+import joris.multiserver.slave.MSS;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PacketPlayerdata extends Packet {
@@ -42,7 +44,7 @@ public class PacketPlayerdata extends Packet {
 
 	@Override
 	public void handle() {
-		NBTTagCompound save = SaveHelper.readPlayerData(this.uuid);
+		NBTTagCompound save = MSS.Saver.readPlayerData(this.uuid);
 		if (save != null) {
 			for (Object key : this.player.func_150296_c()) {
 				if (save.hasKey((String) key)) {
@@ -50,9 +52,9 @@ public class PacketPlayerdata extends Packet {
 				}
 				save.setTag((String) key, this.player.getTag((String) key));
 			}
-			SaveHelper.storePlayerData(this.uuid, save);
+			MSS.Saver.storePlayerData(this.uuid, save);
 		} else {
-			MultiServerSlave.Injectionlist.put(this.uuid, this.player);
+			MSS.Injectionlist.put(this.uuid, this.player);
 		}
 		this.sendReply(new PacketSendplayer(this.uuid));
 	}

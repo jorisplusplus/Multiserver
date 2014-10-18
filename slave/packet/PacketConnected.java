@@ -1,7 +1,8 @@
-package joris.multiserver.packet;
+package joris.multiserver.slave.packet;
 
-import jexxus.common.Connection;
-import joris.multiserver.MultiServerSlave;
+import joris.multiserver.common.Packet;
+import joris.multiserver.jexxus.common.Connection;
+import joris.multiserver.slave.MSS;
 import net.minecraft.nbt.NBTTagCompound;
 
 import org.apache.logging.log4j.Level;
@@ -44,10 +45,10 @@ public class PacketConnected extends Packet {
 	@Override
 	public void handle() {
 		if (this.connected) {
-			MultiServerSlave.logger.log(Level.INFO, "Connected to Master.");
-			MultiServerSlave.ServerPort = this.port;
+			MSS.logger.log(Level.INFO, "Connected to Master.");
+			MSS.ServerPort = this.port;
 		} else {
-			MultiServerSlave.logger.log(Level.INFO, "Auth failed.");
+			MSS.logger.log(Level.INFO, "Auth failed.");
 		}
 	}
 
