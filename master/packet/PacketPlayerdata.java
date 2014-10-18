@@ -1,8 +1,9 @@
-package joris.multiserver.packet;
+package joris.multiserver.master.packet;
 
-import jexxus.common.Connection;
-import joris.multiserver.MSM;
-import joris.multiserver.SaveHelper;
+import joris.multiserver.jexxus.common.Connection;
+import joris.multiserver.master.MSM;
+import joris.multiserver.common.SaveHelper;
+import joris.multiserver.common.Packet;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PacketPlayerdata extends Packet {

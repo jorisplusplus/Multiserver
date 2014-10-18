@@ -1,4 +1,4 @@
-package jexxus.common;
+package joris.multiserver.jexxus.common;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
-import joris.multiserver.packet.Packet;
+import joris.multiserver.common.Packet;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**

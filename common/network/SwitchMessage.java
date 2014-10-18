@@ -1,4 +1,4 @@
-package joris.multiserver.network;
+package joris.multiserver.common.network;
 
 //import net.minecraft.client.gui.GuiMainMenu;
 //import net.minecraft.client.multiplayer.ServerData;

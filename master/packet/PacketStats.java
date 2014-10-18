@@ -1,9 +1,10 @@
-package joris.multiserver.packet;
+package joris.multiserver.master.packet;
 
-import jexxus.common.Connection;
-import joris.multiserver.InstanceServer;
-import joris.multiserver.MSM;
+import joris.multiserver.jexxus.common.Connection;
+import joris.multiserver.master.InstanceServer;
+import joris.multiserver.master.MSM;
 import net.minecraft.nbt.NBTTagCompound;
+import joris.multiserver.common.Packet;
 
 public class PacketStats extends Packet {
 

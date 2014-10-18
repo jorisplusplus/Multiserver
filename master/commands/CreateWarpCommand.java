@@ -1,11 +1,10 @@
-package joris.multiserver.commands;
+package joris.multiserver.master.commands;
 
-import joris.multiserver.MSM;
-import joris.multiserver.SaveHelper;
-import joris.multiserver.Waypoint;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
+import joris.multiserver.common.Waypoint;
+import joris.multiserver.master.MSM;
 
 public class CreateWarpCommand extends CommandBase {
 

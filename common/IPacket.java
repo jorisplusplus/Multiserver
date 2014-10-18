@@ -1,4 +1,4 @@
-package joris.multiserver.packet;
+package joris.multiserver.common;
 
 import net.minecraft.nbt.NBTTagCompound;
 

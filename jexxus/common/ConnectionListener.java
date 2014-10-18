@@ -1,6 +1,6 @@
-package jexxus.common;
+package joris.multiserver.jexxus.common;
 
-import jexxus.server.ServerConnection;
+import joris.multiserver.jexxus.server.ServerConnection;
 
 public interface ConnectionListener {
 

@@ -1,14 +1,15 @@
-package joris.multiserver.packet;
+package joris.multiserver.master.packet;
 
 import java.util.List;
 
-import jexxus.common.Connection;
-import joris.multiserver.MSM;
-import joris.multiserver.network.SwitchMessage;
+import joris.multiserver.jexxus.common.Connection;
+import joris.multiserver.master.MSM;
+import joris.multiserver.common.network.SwitchMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import joris.multiserver.common.Packet;
 
 public class PacketSendplayer extends Packet {
 

@@ -1,6 +1,7 @@
-package joris.multiserver.packet;
+package joris.multiserver.master.packet;
 
-import jexxus.common.Connection;
+import joris.multiserver.jexxus.common.Connection;
+import joris.multiserver.common.Packet;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PacketConnected extends Packet {

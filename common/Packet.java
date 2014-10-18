@@ -1,6 +1,6 @@
-package joris.multiserver.packet;
+package joris.multiserver.common;
 
-import jexxus.common.Connection;
+import joris.multiserver.jexxus.common.Connection;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class Packet implements IPacket {

@@ -1,7 +1,7 @@
-package joris.multiserver;
+package joris.multiserver.master;
 
-import joris.multiserver.packet.PacketReqstats;
-import joris.multiserver.packet.PacketText;
+import joris.multiserver.master.packet.PacketReqstats;
+import joris.multiserver.master.packet.PacketText;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ServerChatEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

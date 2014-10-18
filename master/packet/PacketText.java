@@ -1,11 +1,12 @@
-package joris.multiserver.packet;
+package joris.multiserver.master.packet;
 
 import java.util.Iterator;
 import java.util.Map;
+import joris.multiserver.common.Packet;
 
-import jexxus.common.Connection;
-import joris.multiserver.InstanceServer;
-import joris.multiserver.MSM;
+import joris.multiserver.jexxus.common.Connection;
+import joris.multiserver.master.InstanceServer;
+import joris.multiserver.master.MSM;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;

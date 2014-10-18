@@ -1,4 +1,4 @@
-package joris.multiserver;
+package joris.multiserver.common;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -80,7 +80,6 @@ public class SaveHelper {
 	 * @param nbttagcompound
 	 */
 	public void storeWaypoints(NBTTagCompound nbttagcompound) {
-		MSM.logger.log(Level.INFO, dataDirectory);
 		try {
 			File file1 = new File(dataDirectory, "Waypoints.dat.tmp");
 			File file2 = new File(dataDirectory, "Waypoints.dat");

@@ -1,9 +1,9 @@
-package joris.multiserver;
+package joris.multiserver.master;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import jexxus.common.Connection;
+import joris.multiserver.jexxus.common.Connection;
 
 import org.apache.logging.log4j.Level;
 

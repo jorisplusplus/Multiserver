@@ -1,6 +1,6 @@
-package joris.multiserver;
+package joris.multiserver.master;
 
-import jexxus.common.Connection;
+import joris.multiserver.jexxus.common.Connection;
 
 public class InstanceServer {
 

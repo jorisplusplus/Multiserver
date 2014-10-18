@@ -1,4 +1,4 @@
-package jexxus.server;
+package joris.multiserver.jexxus.server;
 
 import java.io.IOException;
 import java.net.BindException;
@@ -14,8 +14,8 @@ import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 
-import jexxus.common.Connection;
-import jexxus.common.ConnectionListener;
+import joris.multiserver.jexxus.common.Connection;
+import joris.multiserver.jexxus.common.ConnectionListener;
 
 /**
  * Acts as a server for incoming client connections. The server can send and

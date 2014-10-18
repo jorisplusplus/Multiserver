@@ -1,13 +1,13 @@
-package joris.multiserver;
+package joris.multiserver.master;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import jexxus.common.Connection;
-import jexxus.common.ConnectionListener;
-import jexxus.server.ServerConnection;
-import joris.multiserver.packet.Packet;
-import joris.multiserver.packet.PacketRegistry;
+import joris.multiserver.jexxus.common.Connection;
+import joris.multiserver.jexxus.common.ConnectionListener;
+import joris.multiserver.jexxus.server.ServerConnection;
+import joris.multiserver.common.Packet;
+import joris.multiserver.common.PacketRegistry;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 

@@ -1,10 +1,10 @@
-package joris.multiserver.packet;
+package joris.multiserver.common;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
-import jexxus.common.Connection;
+import joris.multiserver.jexxus.common.Connection;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PacketRegistry {

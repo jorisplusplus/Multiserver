@@ -1,4 +1,4 @@
-package jexxus.common;
+package joris.multiserver.jexxus.common;
 
 public class InvalidProtocolException extends RuntimeException {
 

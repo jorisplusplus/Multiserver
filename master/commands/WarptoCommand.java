@@ -1,4 +1,4 @@
-package joris.multiserver.commands;
+package joris.multiserver.master.commands;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import joris.multiserver.InstanceServer;
-import joris.multiserver.MSM;
-import joris.multiserver.Waypoint;
+import joris.multiserver.master.InstanceServer;
+import joris.multiserver.master.MSM;
+import joris.multiserver.common.Waypoint;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;

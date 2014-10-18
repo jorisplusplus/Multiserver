@@ -1,4 +1,4 @@
-package jexxus.common;
+package joris.multiserver.jexxus.common;
 
 /**
  * Used for the requirements of message delivery.

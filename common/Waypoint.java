@@ -1,4 +1,4 @@
-package joris.multiserver;
+package joris.multiserver.common;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
