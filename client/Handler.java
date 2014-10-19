@@ -1,4 +1,4 @@
-package joris.multiserver;
+package joris.multiserver.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;

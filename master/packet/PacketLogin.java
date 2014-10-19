@@ -15,20 +15,18 @@ public class PacketLogin extends Packet {
 
 	private String	password;
 	private String	name;
-	private int		port;
-	private String	IP;
+	private String	Details;
 
 	public PacketLogin(Connection conn, NBTTagCompound tag) {
 		super(conn);
 		this.loadFromNBT(tag);
 	}
 
-	public PacketLogin(String pass, String name, String ip) {
+	public PacketLogin(String pass, String name, String Details) {
 		super(null);
 		this.password = pass;
 		this.name = name;
-		this.IP = ip;
-		this.port = MinecraftServer.getServer().getPort();
+		this.Details = Details;
 	}
 
 	@Override
@@ -41,8 +39,7 @@ public class PacketLogin extends Packet {
 		super.loadFromNBT(tag);
 		this.password = tag.getString("pass");
 		this.name = tag.getString("name");
-		this.IP = tag.getString("ip");
-		this.port = tag.getInteger("port");
+		this.Details = tag.getString("Details");
 	}
 
 	@Override
@@ -50,8 +47,7 @@ public class PacketLogin extends Packet {
 		super.safeToNBT(tag);
 		tag.setString("name", this.name);
 		tag.setString("pass", this.password);
-		tag.setString("ip", this.IP);
-		tag.setInteger("port", this.port);
+		tag.setString("Details", this.Details);;
 	}
 
 	@Override
@@ -65,15 +61,14 @@ public class PacketLogin extends Packet {
 		HashMap Reply = new HashMap();
 		Reply.put("Command", "Login");
 		if (legit) {
-			this.sendReply(new PacketConnected(true, MinecraftServer.getServer().getPort()));
+			this.sendReply(new PacketConnected(true));
 			MSM.logger.log(Level.INFO, "Connection verified.");
 			this.sender.verified = true;
 			instance.connection = this.sender;
-			instance.Port = this.port;
-			instance.IP = this.IP;
+			instance.Details = this.Details;
 		} else {
 			Reply.put("Data", false);
-			this.sendReply(new PacketConnected(false, 0));
+			this.sendReply(new PacketConnected(false));
 			MSM.logger.log(Level.INFO, "Connection denied.");
 			MSM.serverTcp.remove(this.sender);
 		}

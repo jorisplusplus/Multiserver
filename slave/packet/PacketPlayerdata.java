@@ -11,16 +11,18 @@ public class PacketPlayerdata extends Packet {
 
 	private NBTTagCompound	player;
 	private String			uuid;
+	private String			relay;
 
 	public PacketPlayerdata(Connection conn, NBTTagCompound tag) {
 		super(conn);
 		this.loadFromNBT(tag);
 	}
 
-	public PacketPlayerdata(NBTTagCompound player, String uuid) {
+	public PacketPlayerdata(NBTTagCompound player, String uuid, String relay) {
 		super(null);
 		this.uuid = uuid;
 		this.player = player;
+		this.relay = relay;
 	}
 
 	@Override
@@ -33,6 +35,7 @@ public class PacketPlayerdata extends Packet {
 		super.loadFromNBT(tag);
 		this.uuid = tag.getString("uuid");
 		this.player = (NBTTagCompound) tag.getTag("player");
+		this.relay = tag.getString("relay");
 	}
 
 	@Override
@@ -40,6 +43,7 @@ public class PacketPlayerdata extends Packet {
 		super.safeToNBT(tag);
 		tag.setString("uuid", this.uuid);
 		tag.setTag("player", this.player);
+		tag.setString("relay", this.relay);
 	}
 
 	@Override

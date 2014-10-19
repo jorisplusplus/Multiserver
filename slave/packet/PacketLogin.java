@@ -9,20 +9,18 @@ public class PacketLogin extends Packet {
 
 	private String	password;
 	private String	name;
-	private int		port;
-	private String	IP;
+	private String	Details;
 
 	public PacketLogin(Connection conn, NBTTagCompound tag) {
 		super(conn);
 		this.loadFromNBT(tag);
 	}
 
-	public PacketLogin(String pass, String name, String ip) {
+	public PacketLogin(String pass, String name, String Details) {
 		super(null);
 		this.password = pass;
 		this.name = name;
-		this.IP = ip;
-		this.port = MinecraftServer.getServer().getPort();
+		this.Details = Details;
 	}
 
 	@Override
@@ -35,8 +33,7 @@ public class PacketLogin extends Packet {
 		super.loadFromNBT(tag);
 		this.password = tag.getString("pass");
 		this.name = tag.getString("name");
-		this.IP = tag.getString("ip");
-		this.port = tag.getInteger("port");
+		this.Details = tag.getString("Details");
 	}
 
 	@Override
@@ -44,8 +41,7 @@ public class PacketLogin extends Packet {
 		super.safeToNBT(tag);
 		tag.setString("name", this.name);
 		tag.setString("pass", this.password);
-		tag.setString("ip", this.IP);
-		tag.setInteger("port", this.port);
+		tag.setString("Details", this.Details);;
 	}
 
 	@Override

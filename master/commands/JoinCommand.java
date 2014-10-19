@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cpw.mods.fml.server.FMLServerHandler;
 import joris.multiserver.master.InstanceServer;
 import joris.multiserver.master.MSM;
 import net.minecraft.command.CommandBase;
@@ -30,9 +31,7 @@ public class JoinCommand extends CommandBase {
 			} else {
 				listing.add(server.name);
 			}
-			// it.remove(); // avoids a ConcurrentModificationException
 		}
-
 		return listing;
 	}
 

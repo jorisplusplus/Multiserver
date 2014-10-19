@@ -1,9 +1,9 @@
-package joris.multiserver.network;
+package joris.multiserver.client.network;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import joris.multiserver.multiServerClient;
+import joris.multiserver.client.multiServerClient;
 
 import com.google.common.net.HostAndPort;
 

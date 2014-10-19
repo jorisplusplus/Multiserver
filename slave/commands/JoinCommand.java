@@ -19,7 +19,7 @@ public class JoinCommand extends CommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "join - Go back to the master server";
+		return "join [instance] - Jump to a instance or go to the master server.";
 	}
 
 	@Override
@@ -30,11 +30,15 @@ public class JoinCommand extends CommandBase {
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] parameters) {
+	public void processCommand(ICommandSender sender, String[] para) {
 		if (MSS.TCPClient.isConnected()) {
 			if (sender instanceof EntityPlayerMP) {
 				try {
-					MSS.sendPlayerDataAndReconnect((EntityPlayerMP) sender);
+					if(para.length > 0) {
+						MSS.sendPlayerDataAndReconnect((EntityPlayerMP) sender, para[0]);
+					} else {
+						MSS.sendPlayerDataAndReconnect((EntityPlayerMP) sender, "master");
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -42,8 +46,7 @@ public class JoinCommand extends CommandBase {
 				sender.addChatMessage(new ChatComponentText("Player only"));
 			}
 		} else {
-			sender.addChatMessage(new ChatComponentText("Master not live"));
-
+			sender.addChatMessage(new ChatComponentText("No connection to the master server"));
 		}
 	}
 

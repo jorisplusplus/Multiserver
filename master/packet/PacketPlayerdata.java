@@ -50,31 +50,24 @@ public class PacketPlayerdata extends Packet implements IRelayble {
 
 	@Override
 	public void handle() {
-		if(this.relay.equalsIgnoreCase("master")) {
-			NBTTagCompound save = MSM.Saver.readPlayerData(this.uuid);
-			if (save != null) {
-				for (Object key : this.player.func_150296_c()) {
-					if (save.hasKey((String) key)) {
-						save.removeTag((String) key);
-					}
-					save.setTag((String) key, this.player.getTag((String) key));
+		NBTTagCompound save = MSM.Saver.readPlayerData(this.uuid);
+		if (save != null) {
+			for (Object key : this.player.func_150296_c()) {
+				if (save.hasKey((String) key)) {
+					save.removeTag((String) key);
 				}
-				MSM.Saver.storePlayerData(this.uuid, save);
-			} else {
-				MSM.Injectionlist.put(this.uuid, this.player);
+				save.setTag((String) key, this.player.getTag((String) key));
 			}
-			this.sendReply(new PacketSendplayer(this.uuid));
-		} else { 
-			InstanceServer server = MSM.Instances.get(this.relay);
-			if(server != null) {
-				server.connection.send(this);
-			}
+			MSM.Saver.storePlayerData(this.uuid, save);
+		} else {
+			MSM.Injectionlist.put(this.uuid, this.player);
 		}
+		this.sendReply(new PacketSendplayer(this.uuid));
 	}
 
 	@Override
 	public boolean shouldRelay() {
-		return this.relay.equalsIgnoreCase(PacketRegistry.getName());
+		return !this.relay.equalsIgnoreCase(PacketRegistry.getName());
 	}
 
 	@Override

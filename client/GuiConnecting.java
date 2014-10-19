@@ -1,4 +1,4 @@
-package joris.multiserver;
+package joris.multiserver.client;
 
 
 import cpw.mods.fml.client.FMLClientHandler;

@@ -20,6 +20,7 @@ import joris.multiserver.slave.packet.PacketStats;
 import joris.multiserver.slave.packet.PacketText;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
@@ -37,6 +38,7 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.server.FMLServerHandler;
 
 @Mod(modid = MSS.MODID, name = MSS.MODID, version = MSS.VERSION, acceptableRemoteVersions = "*")
 public class MSS {
@@ -51,7 +53,7 @@ public class MSS {
 	public static String							IP;
 	// Minecraft master port and ip
 	public static String							ServerIP;
-	public static Integer							ServerPort;
+	public static String							ServerDetails;
 	public static String							Name;
 	public static String							Password;
 	public static HashMap<String, NBTTagCompound>	Injectionlist	= new HashMap();
@@ -59,6 +61,7 @@ public class MSS {
 	public static ArrayList<String>					Sync			= new ArrayList();
 	public static SaveHelper						Saver;	
 	public static NBTTagCompound					waypoints;
+	public static NBTTagCompound					instances;
 	// The instance of your mod that Forge uses.
 	@Instance(value = MODID)
 	public static MSS					instance;
@@ -97,6 +100,7 @@ public class MSS {
 		this.Saver = new SaveHelper();
 		logger = LogManager.getLogger("MultiServer");
 		logger.log(Level.INFO, "Starting tcp on 25566");
+		ServerDetails = ServerIP + ":" + MinecraftServer.getServer().getPort();
 		Events events = new Events();
 		MinecraftForge.EVENT_BUS.register(events);
 		FMLCommonHandler.instance().bus().register(events);
@@ -112,7 +116,7 @@ public class MSS {
 		TCPClient.close();
 	}
 
-	public static void sendPlayerData(EntityPlayerMP player, NBTTagCompound additional) throws IOException {
+	public static void sendPlayerData(EntityPlayerMP player, NBTTagCompound additional, String instanceName) throws IOException {
 		NBTTagCompound data = new NBTTagCompound();
 		player.writeToNBT(data);
 		NBTTagCompound transfer = new NBTTagCompound();
@@ -131,12 +135,12 @@ public class MSS {
 				transfer.setTag((String) key, additional.getTag((String) key));
 			}
 		}
-		TCPClient.send(new PacketPlayerdata(transfer, player.getUniqueID().toString()));
+		TCPClient.send(new PacketPlayerdata(transfer, player.getUniqueID().toString(), instanceName));
 	}
 
-	public static void sendPlayerDataAndReconnect(EntityPlayerMP player) throws IOException {
-		sendPlayerData(player, null);
-		scheduleTransfer(player.getUniqueID().toString(), ServerIP + ":" + ServerPort);
+	public static void sendPlayerDataAndReconnect(EntityPlayerMP player, String instanceName) throws IOException {
+		sendPlayerData(player, null, instanceName);
+		scheduleTransfer(player.getUniqueID().toString(), instances.getString(instanceName));
 	}
 
 	public static void scheduleTransfer(String uniqueID, String target) {
@@ -158,7 +162,7 @@ public class MSS {
 		}
 		if (TCPClient.isConnected()) {
 			logger.log(Level.INFO, "Logging in on master server.");
-			TCPClient.send(new PacketLogin(Password, Name, ServerIP));
+			TCPClient.send(new PacketLogin(Password, Name, ServerDetails));
 		} else {
 			logger.log(Level.INFO, "Can't connect to master server.");
 		}

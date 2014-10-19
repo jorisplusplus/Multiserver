@@ -1,8 +1,8 @@
-package joris.multiserver;
+package joris.multiserver.client;
 
 import java.util.ArrayList;
 
-import joris.multiserver.network.SwitchMessage;
+import joris.multiserver.client.network.SwitchMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.multiplayer.ServerData;

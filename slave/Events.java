@@ -57,7 +57,7 @@ public class Events {
 	public void PlayerLoggedOutEvent(PlayerEvent.PlayerLoggedOutEvent event) {
 		MSS.TCPClient.send(new PacketStats(MinecraftServer.getServer().getCurrentPlayerCount()));
 		try {
-			MSS.sendPlayerData((EntityPlayerMP) event.player, null);
+			MSS.sendPlayerData((EntityPlayerMP) event.player, null, "master");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

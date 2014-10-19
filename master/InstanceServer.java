@@ -6,8 +6,7 @@ public class InstanceServer {
 
 	public String		name;
 	public String		password;
-	public String		IP;
-	public Integer		Port;
+	public String		Details;
 	public Connection	connection;
 	public Integer		numberPlayers;
 
@@ -66,6 +65,6 @@ public class InstanceServer {
 	}
 
 	public String ipPort() {
-		return this.IP + ":" + this.Port;
+		return this.Details;
 	}
 }

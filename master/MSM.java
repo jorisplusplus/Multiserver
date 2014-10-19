@@ -209,7 +209,7 @@ public class MSM {
 	 */
 	public static void sendPlayerDataAndReconnect(InstanceServer server, EntityPlayerMP player) throws IOException {
 		sendPlayerData(server, player, null);
-		scheduleTransfer(player.getUniqueID().toString(), server.IP + ":" + server.Port);
+		scheduleTransfer(player.getUniqueID().toString(), server.Details);
 	}
 
 	/**
