@@ -6,9 +6,11 @@ import net.minecraft.nbt.NBTTagCompound;
 public class Packet implements IPacket {
 
 	protected Connection	sender;
+	protected String		senderName;
 
 	public Packet(Connection conn) {
 		this.sender = conn;
+		this.senderName = PacketRegistry.getName();
 	}
 
 	@Override
@@ -18,12 +20,13 @@ public class Packet implements IPacket {
 
 	@Override
 	public void loadFromNBT(NBTTagCompound tag) {
-
+		this.senderName = tag.getString("senderName");
 	}
 
 	@Override
 	public void safeToNBT(NBTTagCompound tag) {
 		tag.setInteger("ID", this.getID());
+		tag.setString("senderName", this.senderName);
 	}
 
 	@Override
