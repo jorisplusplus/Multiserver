@@ -45,17 +45,6 @@ public class PacketText extends Packet {
 	@Override
 	public void handle() {
 		MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentText(this.text));
-		Iterator it = MSM.Instances.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry entry = (Map.Entry) it.next();
-			InstanceServer server = (InstanceServer) entry.getValue();
-			NBTTagCompound tag = new NBTTagCompound();
-			this.safeToNBT(tag);
-			if (server.connection != this.sender) {
-				if (server.isConnected()) {
-					server.connection.send(tag);
-				}
-			}
-		}
+		MSM.Broadcast(this, this.sender);
 	}
 }

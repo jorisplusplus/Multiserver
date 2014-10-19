@@ -8,6 +8,7 @@ import joris.multiserver.jexxus.common.ConnectionListener;
 import joris.multiserver.jexxus.server.ServerConnection;
 import joris.multiserver.common.Packet;
 import joris.multiserver.common.PacketRegistry;
+import joris.multiserver.common.IRelayble;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -46,6 +47,15 @@ public class TCPListener implements ConnectionListener {
 				if(packet.getID() == 0) { //Always handle login packet
 					packet.handle();
 				} else if(from.verified) { //Only handle non login packets when connection is verified.
+					if(packet instanceof IRelayble) {
+						if(((IRelayble) packet).shouldRelay()) {
+							InstanceServer server = MSM.Instances.get(((IRelayble) packet).getName());
+							if(server != null) {
+								server.connection.send(packet);
+							}
+							return;
+						}
+					}
 					packet.handle();
 				}
 			}

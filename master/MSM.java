@@ -84,7 +84,7 @@ public class MSM {
 			}
 			logger.log(Level.INFO, "Loaded instances: " + Instances.size());
 		} else {
-			logger.log(Level.WARN, "Uneven config instances. In short you fucked up.");
+			throw new RuntimeException("Uneven config instances. In short you fucked up.");
 		}
 	}
 
@@ -100,6 +100,7 @@ public class MSM {
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 		network.registerMessage(SwitchMessage.Handler.class, SwitchMessage.class, 0, Side.SERVER);
 		this.loadConfig(new Configuration(event.getSuggestedConfigurationFile()));
+		PacketRegistry.setName("master");
 		PacketRegistry.register(PacketLogin.class, 0);
 		PacketRegistry.register(PacketConnected.class, 1);
 		PacketRegistry.register(PacketText.class, 2);
@@ -196,7 +197,7 @@ public class MSM {
 				transfer.setTag((String) key, additional.getTag((String) key));
 			}
 		}
-		server.connection.send(new PacketPlayerdata(transfer, player.getUniqueID().toString()));
+		server.connection.send(new PacketPlayerdata(transfer, player.getUniqueID().toString(), server.name));
 	}
 
 	/**
@@ -235,6 +236,21 @@ public class MSM {
 			InstanceServer server = (InstanceServer) entry.getValue();
 			if (server.isConnected()) {
 				server.connection.send(packet);
+			}
+		}
+	}
+	
+	public static void Broadcast(Packet packet, Connection exlude) {
+		Iterator it = MSM.Instances.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry entry = (Map.Entry) it.next();
+			InstanceServer server = (InstanceServer) entry.getValue();
+			NBTTagCompound tag = new NBTTagCompound();
+			packet.safeToNBT(tag);
+			if (server.connection != exlude) {
+				if (server.isConnected()) {
+					server.connection.send(tag);
+				}
 			}
 		}
 	}

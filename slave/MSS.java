@@ -58,10 +58,11 @@ public class MSS {
 	public static HashMap<String, String>			Scheduled		= new HashMap();
 	public static ArrayList<String>					Sync			= new ArrayList();
 	public static SaveHelper						Saver;	
-
+	public static NBTTagCompound					waypoints;
 	// The instance of your mod that Forge uses.
 	@Instance(value = MODID)
 	public static MSS					instance;
+	
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -70,6 +71,7 @@ public class MSS {
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 		network.registerMessage(SwitchMessage.Handler.class, SwitchMessage.class, 0, Side.SERVER);
 		this.loadConfig(new Configuration(event.getSuggestedConfigurationFile()));
+		PacketRegistry.setName(Name);
 		PacketRegistry.register(PacketLogin.class, 0);
 		PacketRegistry.register(PacketConnected.class, 1);
 		PacketRegistry.register(PacketText.class, 2);
@@ -135,8 +137,6 @@ public class MSS {
 	public static void sendPlayerDataAndReconnect(EntityPlayerMP player) throws IOException {
 		sendPlayerData(player, null);
 		scheduleTransfer(player.getUniqueID().toString(), ServerIP + ":" + ServerPort);
-		// network.sendTo(new SwitchMessage(ServerIP + ":" + ServerPort),
-		// player);
 	}
 
 	public static void scheduleTransfer(String uniqueID, String target) {

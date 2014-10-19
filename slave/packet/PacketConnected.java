@@ -11,6 +11,7 @@ public class PacketConnected extends Packet {
 
 	private boolean	connected;
 	private Integer	port;
+	private NBTTagCompound waypoints;
 
 	public PacketConnected(Connection conn, NBTTagCompound tag) {
 		super(conn);
@@ -33,6 +34,7 @@ public class PacketConnected extends Packet {
 		super.loadFromNBT(tag);
 		this.connected = tag.getBoolean("connected");
 		this.port = tag.getInteger("port");
+		this.waypoints = tag.getCompoundTag("waypoints");
 	}
 
 	@Override
@@ -40,6 +42,7 @@ public class PacketConnected extends Packet {
 		super.safeToNBT(tag);
 		tag.setBoolean("connected", this.connected);
 		tag.setInteger("port", this.port);
+		tag.setTag("waypoints", this.waypoints);
 	}
 
 	@Override
@@ -47,6 +50,7 @@ public class PacketConnected extends Packet {
 		if (this.connected) {
 			MSS.logger.log(Level.INFO, "Connected to Master.");
 			MSS.ServerPort = this.port;
+			MSS.waypoints = this.waypoints;
 		} else {
 			MSS.logger.log(Level.INFO, "Auth failed.");
 		}
