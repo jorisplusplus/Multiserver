@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public class PacketRegistry {
 	//test
 	public static HashMap<Integer, Class<? extends Packet>>	classes	= new HashMap<Integer, Class<? extends Packet>>();
-
+	private static String serverName;
 	public static void register(Class<? extends Packet> classname, int id) {
 		if (classes.get(id) != null) {
 			throw new RuntimeException("Packet id already exists.");
@@ -30,5 +30,13 @@ public class PacketRegistry {
 			}
 		}
 		return null;
+	}
+
+	public static String getName() {
+		return serverName;
+	}
+	
+	public static void setName(String name) {
+		serverName = name;
 	}
 }
