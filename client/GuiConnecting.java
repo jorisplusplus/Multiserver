@@ -46,7 +46,7 @@ public class GuiConnecting extends GuiScreen
     @Override
     public void drawScreen( int par1, int par2, float par3) {
         this.drawDefaultBackground();
-        this.drawCenteredString( this.fontRendererObj, "Joining server...", this.width / 2, this.height / 2 - 50, 16777215 );
+        this.drawCenteredString( this.fontRendererObj, "Joining instance...", this.width / 2, this.height / 2 - 50, 16777215 );
         super.drawScreen( par1, par2, par3 );
     }
 }
