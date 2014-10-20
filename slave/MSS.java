@@ -1,21 +1,19 @@
 package joris.multiserver.slave;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
+import joris.multiserver.common.PacketRegistry;
+import joris.multiserver.common.SaveHelper;
+import joris.multiserver.common.network.SwitchMessage;
 import joris.multiserver.jexxus.client.ClientConnection;
 import joris.multiserver.slave.commands.CreateWarpCommand;
 import joris.multiserver.slave.commands.JoinCommand;
 import joris.multiserver.slave.commands.ReconnectCommand;
 import joris.multiserver.slave.commands.WarptoCommand;
-import joris.multiserver.common.network.SwitchMessage;
 import joris.multiserver.slave.packet.PacketConnected;
 import joris.multiserver.slave.packet.PacketLogin;
 import joris.multiserver.slave.packet.PacketPlayerdata;
-import joris.multiserver.common.PacketRegistry;
-import joris.multiserver.common.SaveHelper;
 import joris.multiserver.slave.packet.PacketReqstats;
 import joris.multiserver.slave.packet.PacketSendplayer;
 import joris.multiserver.slave.packet.PacketStats;
@@ -41,7 +39,6 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.server.FMLServerHandler;
 
 @Mod(modid = MSS.MODID, name = MSS.MODID, version = MSS.VERSION, acceptableRemoteVersions = "*")
 public class MSS {
@@ -61,14 +58,13 @@ public class MSS {
 	public static String							Password;
 	public static HashMap<String, NBTTagCompound>	Injectionlist	= new HashMap();
 	public static HashMap<String, Boolean>			Scheduled		= new HashMap();
-	public static ArrayList<String>					Sync			= new ArrayList();
-	public static SaveHelper						Saver;	
+	public static String[]							Sync;
+	public static SaveHelper						Saver;
 	public static NBTTagCompound					waypoints;
 	public static NBTTagCompound					instances;
 	// The instance of your mod that Forge uses.
 	@Instance(value = MODID)
-	public static MSS					instance;
-	
+	public static MSS								instance;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -95,13 +91,13 @@ public class MSS {
 		ServerIP = config.get(Configuration.CATEGORY_GENERAL, "Server_IP", "127.0.0.1").getString();
 		Name = config.get(Configuration.CATEGORY_GENERAL, "Name", "name").getString();
 		Password = config.get(Configuration.CATEGORY_GENERAL, "Password", "password").getString();
-		Sync = new ArrayList<String>(Arrays.asList(config.getStringList("Synclist", Configuration.CATEGORY_GENERAL, new String[] { "Inventory", "EnderItems" }, "What playerdata should be synced. NBT tag names")));
+		Sync = config.getStringList("Synclist", Configuration.CATEGORY_GENERAL, new String[] { "Inventory", "EnderItems" }, "What playerdata should be synced. NBT tag names");
 		config.save();
 	}
 
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
-		this.Saver = new SaveHelper();
+		MSS.Saver = new SaveHelper();
 		logger = LogManager.getLogger("MultiServer");
 		logger.log(Level.INFO, "Starting tcp on 25566");
 		ServerDetails = ServerIP + ":" + MinecraftServer.getServer().getPort();
@@ -155,7 +151,9 @@ public class MSS {
 
 	public static Boolean shouldTransfer(String uniqueID) {
 		Boolean target = Scheduled.get(uniqueID);
-		if(target != null) return target;
+		if (target != null) {
+			return target;
+		}
 		return false;
 	}
 

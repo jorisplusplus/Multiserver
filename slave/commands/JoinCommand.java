@@ -34,7 +34,7 @@ public class JoinCommand extends CommandBase {
 		if (MSS.TCPClient.isConnected()) {
 			if (sender instanceof EntityPlayerMP) {
 				try {
-					if(para.length > 0) {
+					if (para.length > 0) {
 						MSS.sendPlayerDataAndReconnect((EntityPlayerMP) sender, para[0]);
 					} else {
 						MSS.sendPlayerDataAndReconnect((EntityPlayerMP) sender, "master");
@@ -57,7 +57,26 @@ public class JoinCommand extends CommandBase {
 
 	@Override
 	public List addTabCompletionOptions(ICommandSender sender, String[] list) {
-		return null;
+		List listing = new ArrayList();
+		for (Object key : MSS.instances.func_150296_c()) {
+			Boolean connected;
+			if (MSS.instances.hasKey((String) key)) {
+				connected = MSS.instances.getBoolean((String) key);
+			} else {
+				connected = false;
+			}
+			if (list.length > 0) {
+				if (((String) key).contains(list[0])) {
+					if (connected) {
+						listing.add(key);
+					}
+				}
+			} else {
+				listing.add(key);
+			}
+		}
+
+		return listing;
 	}
 
 	@Override

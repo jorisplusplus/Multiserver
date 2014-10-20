@@ -2,12 +2,10 @@ package joris.multiserver.slave.commands;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import joris.multiserver.slave.MSS;
 import joris.multiserver.common.Waypoint;
+import joris.multiserver.slave.MSS;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -26,7 +24,7 @@ public class WarptoCommand extends CommandBase {
 	public String getCommandUsage(ICommandSender sender) {
 		return "/warpto <waypoint name>";
 	}
-	
+
 	@Override
 	public List addTabCompletionOptions(ICommandSender sender, String[] list) {
 		return new ArrayList(MSS.waypoints.func_150296_c());
@@ -36,7 +34,7 @@ public class WarptoCommand extends CommandBase {
 	public void processCommand(ICommandSender sender, String[] para) {
 		if (sender instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP) sender;
-			if (para.length > 0) {				
+			if (para.length > 0) {
 				if (MSS.waypoints.getTag(para[0]) != null) {
 					Waypoint waypoint = new Waypoint((NBTTagCompound) MSS.waypoints.getTag(para[0]));
 					if (waypoint.instanceName.equals(MSS.Name)) {
@@ -51,7 +49,7 @@ public class WarptoCommand extends CommandBase {
 							MSS.scheduleTransfer(player.getUniqueID().toString());
 						} catch (IOException e) {
 							e.printStackTrace();
-						}						
+						}
 					}
 				} else {
 					sender.addChatMessage(new ChatComponentText("Waypoint not found"));

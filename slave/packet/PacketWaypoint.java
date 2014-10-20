@@ -1,14 +1,14 @@
 package joris.multiserver.slave.packet;
 
-import net.minecraft.nbt.NBTTagCompound;
+import joris.multiserver.common.Packet;
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.slave.MSS;
-import joris.multiserver.common.Packet;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class PacketWaypoint extends Packet {
-	
-	private NBTTagCompound waypoint;
-	private String name;
+
+	private NBTTagCompound	waypoint;
+	private String			name;
 
 	public PacketWaypoint(Connection conn, NBTTagCompound tag) {
 		super(conn);

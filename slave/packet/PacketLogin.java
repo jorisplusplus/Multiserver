@@ -3,7 +3,6 @@ package joris.multiserver.slave.packet;
 import joris.multiserver.common.Packet;
 import joris.multiserver.jexxus.common.Connection;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 
 public class PacketLogin extends Packet {
 
@@ -41,7 +40,8 @@ public class PacketLogin extends Packet {
 		super.safeToNBT(tag);
 		tag.setString("name", this.name);
 		tag.setString("pass", this.password);
-		tag.setString("Details", this.Details);;
+		tag.setString("Details", this.Details);
+		;
 	}
 
 	@Override

@@ -16,10 +16,10 @@ import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
+import joris.multiserver.common.Packet;
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.jexxus.common.ConnectionListener;
 import joris.multiserver.jexxus.common.Delivery;
-import joris.multiserver.common.Packet;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 

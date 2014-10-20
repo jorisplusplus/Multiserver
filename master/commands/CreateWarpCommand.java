@@ -1,12 +1,12 @@
 package joris.multiserver.master.commands;
 
+import joris.multiserver.common.Waypoint;
+import joris.multiserver.master.MSM;
+import joris.multiserver.master.packet.PacketWaypoint;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
-import joris.multiserver.common.Waypoint;
-import joris.multiserver.master.MSM;
-import joris.multiserver.master.packet.PacketWaypoint;
 
 public class CreateWarpCommand extends CommandBase {
 
@@ -30,7 +30,7 @@ public class CreateWarpCommand extends CommandBase {
 				MSM.Saver.storeWaypoints(MSM.waypoints);
 				MSM.Broadcast(new PacketWaypoint(para[0], waypoint.storeToNBT()));
 				sender.addChatMessage(new ChatComponentText("Warp created."));
-			} 
+			}
 		}
 	}
 

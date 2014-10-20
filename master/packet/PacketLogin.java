@@ -2,12 +2,11 @@ package joris.multiserver.master.packet;
 
 import java.util.HashMap;
 
+import joris.multiserver.common.Packet;
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.master.InstanceServer;
 import joris.multiserver.master.MSM;
-import joris.multiserver.common.Packet;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 
 import org.apache.logging.log4j.Level;
 
@@ -47,7 +46,8 @@ public class PacketLogin extends Packet {
 		super.safeToNBT(tag);
 		tag.setString("name", this.name);
 		tag.setString("pass", this.password);
-		tag.setString("Details", this.Details);;
+		tag.setString("Details", this.Details);
+		;
 	}
 
 	@Override
@@ -57,7 +57,11 @@ public class PacketLogin extends Packet {
 		// instances.
 		// THIS IS NOT SECURE, EVERYTHING IS SEND CLEAR TEXT
 		InstanceServer instance = MSM.Instances.get(this.name);
-		legit = instance.password.equalsIgnoreCase(this.password);
+		if (instance != null) {
+			legit = instance.password.equalsIgnoreCase(this.password);
+		} else {
+			legit = false;
+		}
 		HashMap Reply = new HashMap();
 		Reply.put("Command", "Login");
 		if (legit) {
@@ -69,7 +73,7 @@ public class PacketLogin extends Packet {
 			Reply.put("Data", false);
 			this.sendReply(new PacketConnected(false));
 			MSM.logger.log(Level.INFO, "Connection denied.");
-			MSM.serverTcp.remove(this.sender);
+			// MSM.serverTcp.remove(this.sender);
 		}
 	}
 }

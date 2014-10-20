@@ -1,16 +1,16 @@
 package joris.multiserver.common;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 import joris.multiserver.jexxus.common.Connection;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PacketRegistry {
-	//test
+	// test
 	public static HashMap<Integer, Class<? extends Packet>>	classes	= new HashMap<Integer, Class<? extends Packet>>();
-	private static String serverName;
+	private static String									serverName;
+
 	public static void register(Class<? extends Packet> classname, int id) {
 		if (classes.get(id) != null) {
 			throw new RuntimeException("Packet id already exists.");
@@ -24,8 +24,9 @@ public class PacketRegistry {
 		if (classname != null) {
 			try {
 				Constructor constructor = classname.getConstructor(Connection.class, NBTTagCompound.class);
+				constructor.newInstance(conn, tag);
 				return (Packet) constructor.newInstance(conn, tag);
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		} else {
@@ -37,7 +38,7 @@ public class PacketRegistry {
 	public static String getName() {
 		return serverName;
 	}
-	
+
 	public static void setName(String name) {
 		serverName = name;
 	}

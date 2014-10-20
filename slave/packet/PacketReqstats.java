@@ -1,6 +1,5 @@
 package joris.multiserver.slave.packet;
 
-import joris.multiserver.slave.MSS;
 import joris.multiserver.common.Packet;
 import joris.multiserver.jexxus.common.Connection;
 import net.minecraft.nbt.NBTTagCompound;

@@ -1,9 +1,7 @@
 package joris.multiserver.slave.packet;
 
-import joris.multiserver.jexxus.common.Connection;
-import joris.multiserver.slave.MSS;
 import joris.multiserver.common.RelayblePacket;
-import joris.multiserver.common.SaveHelper;
+import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.slave.MSS;
 import net.minecraft.nbt.NBTTagCompound;
 

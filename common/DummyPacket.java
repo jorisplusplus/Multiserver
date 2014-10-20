@@ -1,19 +1,18 @@
 package joris.multiserver.common;
 
-import net.minecraft.nbt.NBTTagCompound;
 import joris.multiserver.jexxus.common.Connection;
-import joris.multiserver.common.Packet;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class DummyPacket extends Packet {
 
-	//Constructor used by the packet registry
+	// Constructor used by the packet registry
 	public DummyPacket(Connection conn, NBTTagCompound tag) {
 		super(conn);
 		this.loadFromNBT(tag);
 	}
 
 	public DummyPacket() {
-		super(null); //Always do this it sets the sendername.
+		super(null); // Always do this it sets the sendername.
 	}
 
 	@Override

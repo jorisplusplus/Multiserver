@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cpw.mods.fml.server.FMLServerHandler;
 import joris.multiserver.master.InstanceServer;
 import joris.multiserver.master.MSM;
 import net.minecraft.command.CommandBase;
@@ -26,7 +25,9 @@ public class JoinCommand extends CommandBase {
 			InstanceServer server = (InstanceServer) pairs.getValue();
 			if (list.length > 0) {
 				if (server.name.contains(list[0])) {
-					listing.add(server.name);
+					if (server.isConnected()) {
+						listing.add(server.name);
+					}
 				}
 			} else {
 				listing.add(server.name);
@@ -47,12 +48,7 @@ public class JoinCommand extends CommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "/join <instance name> [player]";
-	}
-
-	@Override
-	public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_) {
-		return false;
+		return "/join <instance name>";
 	}
 
 	@Override
@@ -76,7 +72,6 @@ public class JoinCommand extends CommandBase {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 	public boolean InstanceCheck(ICommandSender sender, String name) {

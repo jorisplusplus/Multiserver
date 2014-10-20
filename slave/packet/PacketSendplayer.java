@@ -2,11 +2,9 @@ package joris.multiserver.slave.packet;
 
 import java.util.List;
 
-import joris.multiserver.jexxus.common.Connection;
-import joris.multiserver.slave.MSS;
-import joris.multiserver.common.IRelayble;
 import joris.multiserver.common.RelayblePacket;
 import joris.multiserver.common.network.SwitchMessage;
+import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.slave.MSS;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -16,7 +14,7 @@ import net.minecraft.server.MinecraftServer;
 public class PacketSendplayer extends RelayblePacket {
 
 	private String	uuid;
-	private String  IP;
+	private String	IP;
 
 	public PacketSendplayer(Connection conn, NBTTagCompound tag) {
 		super(conn, null);
@@ -47,6 +45,7 @@ public class PacketSendplayer extends RelayblePacket {
 		super.safeToNBT(tag);
 		tag.setString("uuid", this.uuid);
 		tag.setString("IP", this.IP);
+		System.out.println(this.relay);
 	}
 
 	@Override
@@ -62,17 +61,4 @@ public class PacketSendplayer extends RelayblePacket {
 		}
 
 	}
-
-	@Override
-	public boolean shouldRelay() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

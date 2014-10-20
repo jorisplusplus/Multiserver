@@ -2,7 +2,6 @@ package joris.multiserver.slave;
 
 import java.io.IOException;
 
-import joris.multiserver.slave.MSS;
 import joris.multiserver.slave.packet.PacketStats;
 import joris.multiserver.slave.packet.PacketText;
 import net.minecraft.entity.player.EntityPlayerMP;

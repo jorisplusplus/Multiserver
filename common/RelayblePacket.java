@@ -1,17 +1,17 @@
 package joris.multiserver.common;
 
-import net.minecraft.nbt.NBTTagCompound;
 import joris.multiserver.jexxus.common.Connection;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class RelayblePacket extends Packet implements IRelayble {
 
-	protected String relay;
-	
+	protected String	relay;
+
 	public RelayblePacket(Connection conn, String relay) {
 		super(conn);
 		this.relay = relay;
 	}
-	
+
 	@Override
 	public void loadFromNBT(NBTTagCompound tag) {
 		super.loadFromNBT(tag);

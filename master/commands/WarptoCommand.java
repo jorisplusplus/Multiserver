@@ -2,13 +2,10 @@ package joris.multiserver.master.commands;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import joris.multiserver.master.InstanceServer;
-import joris.multiserver.master.MSM;
 import joris.multiserver.common.Waypoint;
+import joris.multiserver.master.MSM;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -27,7 +24,7 @@ public class WarptoCommand extends CommandBase {
 	public String getCommandUsage(ICommandSender sender) {
 		return "/warpto <waypoint name>";
 	}
-	
+
 	@Override
 	public List addTabCompletionOptions(ICommandSender sender, String[] list) {
 		return new ArrayList(MSM.waypoints.func_150296_c());
@@ -37,7 +34,7 @@ public class WarptoCommand extends CommandBase {
 	public void processCommand(ICommandSender sender, String[] para) {
 		if (sender instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP) sender;
-			if (para.length > 0) {				
+			if (para.length > 0) {
 				if (MSM.waypoints.getTag(para[0]) != null) {
 					Waypoint waypoint = new Waypoint((NBTTagCompound) MSM.waypoints.getTag(para[0]));
 					if (waypoint.instanceName.equals("master")) {
@@ -49,8 +46,12 @@ public class WarptoCommand extends CommandBase {
 					} else {
 						// Waypoint on an instance
 						try {
-							MSM.sendPlayerData(MSM.Instances.get(waypoint.instanceName), player, waypoint.travelData());
-							MSM.scheduleTransfer(player.getUniqueID().toString());
+							if (MSM.Instances.get(waypoint.instanceName).isConnected()) {
+								MSM.sendPlayerData(MSM.Instances.get(waypoint.instanceName), player, waypoint.travelData());
+								MSM.scheduleTransfer(player.getUniqueID().toString());
+							} else {
+								sender.addChatMessage(new ChatComponentText("Instance not live"));
+							}
 						} catch (IOException e) {
 							e.printStackTrace();
 						}

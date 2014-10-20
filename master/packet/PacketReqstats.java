@@ -1,8 +1,8 @@
 package joris.multiserver.master.packet;
 
+import joris.multiserver.common.Packet;
 import joris.multiserver.jexxus.common.Connection;
 import net.minecraft.nbt.NBTTagCompound;
-import joris.multiserver.common.Packet;
 
 public class PacketReqstats extends Packet {
 

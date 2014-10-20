@@ -1,13 +1,8 @@
 package joris.multiserver.master.packet;
 
-import joris.multiserver.jexxus.common.Connection;
-import joris.multiserver.master.InstanceServer;
-import joris.multiserver.master.MSM;
-import joris.multiserver.common.IRelayble;
-import joris.multiserver.common.PacketRegistry;
 import joris.multiserver.common.RelayblePacket;
-import joris.multiserver.common.SaveHelper;
-import joris.multiserver.common.Packet;
+import joris.multiserver.jexxus.common.Connection;
+import joris.multiserver.master.MSM;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PacketPlayerdata extends RelayblePacket {

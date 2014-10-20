@@ -1,24 +1,23 @@
 package joris.multiserver.master;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import joris.multiserver.common.Packet;
+import joris.multiserver.common.PacketRegistry;
 import joris.multiserver.common.SaveHelper;
+import joris.multiserver.common.network.SwitchMessage;
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.jexxus.server.Server;
 import joris.multiserver.master.commands.CreateWarpCommand;
 import joris.multiserver.master.commands.InstancesCommand;
 import joris.multiserver.master.commands.JoinCommand;
 import joris.multiserver.master.commands.WarptoCommand;
-import joris.multiserver.common.network.SwitchMessage;
-import joris.multiserver.common.Packet;
 import joris.multiserver.master.packet.PacketConnected;
 import joris.multiserver.master.packet.PacketLogin;
 import joris.multiserver.master.packet.PacketPlayerdata;
-import joris.multiserver.common.PacketRegistry;
 import joris.multiserver.master.packet.PacketReqstats;
 import joris.multiserver.master.packet.PacketSendplayer;
 import joris.multiserver.master.packet.PacketStats;
@@ -34,7 +33,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import scala.actors.threadpool.Arrays;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -56,19 +54,46 @@ public class MSM {
 	public static Logger							logger;
 	public static Server							serverTcp;
 	public static TCPListener						Listener;
-	public static ArrayList<String>					Sync			= new ArrayList(); //What nbt tags should be synced
-	public static HashMap<String, InstanceServer>	Instances		= new HashMap(); //All instances (even not) connected
-	public static HashMap<String, NBTTagCompound>	Injectionlist	= new HashMap(); //Data that should be injected on login player
-	public static HashMap<String, Boolean>			Scheduled		= new HashMap(); //List of players that should be send when the server is ready
+	public static String[]							Sync;									// What
+																							// nbt
+																							// tags
+																							// should
+																							// be
+																							// synced
+	public static HashMap<String, InstanceServer>	Instances		= new HashMap();		// All
+																							// instances
+																							// (even
+																							// not)
+																							// connected
+	public static HashMap<String, NBTTagCompound>	Injectionlist	= new HashMap();		// Data
+																							// that
+																							// should
+																							// be
+																							// injected
+																							// on
+																							// login
+																							// player
+	public static HashMap<String, Boolean>			Scheduled		= new HashMap();		// List
+																							// of
+																							// players
+																							// that
+																							// should
+																							// be
+																							// send
+																							// when
+																							// the
+																							// server
+																							// is
+																							// ready
 	public static SimpleNetworkWrapper				network;
 	public static NBTTagCompound					waypoints		= new NBTTagCompound();
 	public static int								PORT;
 	public static int								TickDelay;
-	public static SaveHelper						Saver;					
+	public static SaveHelper						Saver;
 
 	// The instance of that Forge uses.
 	@Instance(value = MODID)
-	public static MSM					instance;
+	public static MSM								instance;
 
 	/**
 	 * Load config file
@@ -80,7 +105,7 @@ public class MSM {
 		PORT = config.get(Configuration.CATEGORY_GENERAL, "Port", 25566).getInt();
 		ServerIP = config.get(Configuration.CATEGORY_GENERAL, "Server_IP", "127.0.0.1").getString();
 		TickDelay = config.getInt(Configuration.CATEGORY_GENERAL, "TicksBetweenUpdate", 1200, 20, 6000, "Update frequency of the instance stats");
-		Sync = new ArrayList<String>(Arrays.asList(config.getStringList("Synclist", Configuration.CATEGORY_GENERAL, new String[] { "Inventory", "EnderItems" }, "What playerdata should be synced. NBT tag names")));
+		Sync = config.getStringList("Synclist", Configuration.CATEGORY_GENERAL, new String[] { "Inventory", "EnderItems" }, "What playerdata should be synced. NBT tag names");
 		String[] configInstances = config.get(Configuration.CATEGORY_GENERAL, "Instances", new String[] { "name", "password" }, "Whitelist your instances here format: Name newline Password").getStringList();
 		config.save();
 		if ((configInstances.length % 2) == 0) {
@@ -124,8 +149,8 @@ public class MSM {
 	 */
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
-		this.Saver = new SaveHelper();
-		waypoints = this.Saver.readWaypoints();
+		MSM.Saver = new SaveHelper();
+		waypoints = MSM.Saver.readWaypoints();
 		logger.log(Level.INFO, "Starting tcp socket on " + PORT);
 		Listener = new TCPListener();
 		serverTcp = new Server(Listener, PORT, false);
@@ -147,7 +172,7 @@ public class MSM {
 	 */
 	@EventHandler
 	public void serverStopping(FMLServerStoppingEvent event) {
-		this.Saver.storeWaypoints(waypoints);
+		MSM.Saver.storeWaypoints(waypoints);
 		serverTcp.shutdown(true);
 	}
 
@@ -171,18 +196,22 @@ public class MSM {
 	/**
 	 * Schedule player to transfer to a server name
 	 *
-	 * @param uniqueID player UUID
-	 * @param b server name
+	 * @param uniqueID
+	 *            player UUID
+	 * @param b
+	 *            server name
 	 */
 	public static void scheduleTransfer(String uniqueID) {
 		Scheduled.put(uniqueID, true);
 	}
 
 	/**
-	 * Copy all nbttags listed in the config file. 
-	 * 
-	 * @param server Target server
-	 * @param player Target player
+	 * Copy all nbttags listed in the config file.
+	 *
+	 * @param server
+	 *            Target server
+	 * @param player
+	 *            Target player
 	 * @throws IOException
 	 */
 	public static void sendPlayerData(InstanceServer server, EntityPlayerMP player, NBTTagCompound additional) throws IOException {
@@ -228,12 +257,15 @@ public class MSM {
 	 */
 	public static Boolean shouldTransfer(String uniqueID) {
 		Boolean target = Scheduled.get(uniqueID);
-		if(target != null) return target;
+		if (target != null) {
+			return target;
+		}
 		return false;
 	}
 
 	/**
 	 * Broadcast a packet to all connected slaves.
+	 * 
 	 * @param packet
 	 */
 	public static void Broadcast(Packet packet) {
@@ -246,7 +278,7 @@ public class MSM {
 			}
 		}
 	}
-	
+
 	public static void Broadcast(Packet packet, Connection exlude) {
 		Iterator it = MSM.Instances.entrySet().iterator();
 		while (it.hasNext()) {

@@ -1,20 +1,19 @@
 package joris.multiserver.master.packet;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import joris.multiserver.common.Packet;
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.master.InstanceServer;
 import joris.multiserver.master.MSM;
-import joris.multiserver.common.Packet;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PacketConnected extends Packet {
 
-	private boolean	connected;
-	private NBTTagCompound waypoints;
-	private NBTTagCompound instances = new NBTTagCompound();
+	private boolean			connected;
+	private NBTTagCompound	waypoints;
+	private NBTTagCompound	instances	= new NBTTagCompound();
 
 	public PacketConnected(Connection conn, NBTTagCompound tag) {
 		super(conn);
@@ -25,11 +24,11 @@ public class PacketConnected extends Packet {
 		super(null);
 		this.connected = connected;
 		this.waypoints = MSM.waypoints;
-		   Iterator it = MSM.Instances.entrySet().iterator();
-		    while (it.hasNext()) {
-		        Map.Entry pairs = (Map.Entry)it.next();
-		        this.instances.setBoolean((String) pairs.getKey(), ((InstanceServer) pairs.getValue()).isConnected());
-		    }
+		Iterator it = MSM.Instances.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pairs = (Map.Entry) it.next();
+			this.instances.setBoolean((String) pairs.getKey(), ((InstanceServer) pairs.getValue()).isConnected());
+		}
 	}
 
 	@Override

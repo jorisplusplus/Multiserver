@@ -3,12 +3,12 @@ package joris.multiserver.master;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import joris.multiserver.common.IRelayble;
+import joris.multiserver.common.Packet;
+import joris.multiserver.common.PacketRegistry;
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.jexxus.common.ConnectionListener;
 import joris.multiserver.jexxus.server.ServerConnection;
-import joris.multiserver.common.Packet;
-import joris.multiserver.common.PacketRegistry;
-import joris.multiserver.common.IRelayble;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -42,15 +42,21 @@ public class TCPListener implements ConnectionListener {
 		ByteArrayInputStream byteIn = new ByteArrayInputStream(data);
 		try {
 			NBTTagCompound tag = CompressedStreamTools.readCompressed(byteIn);
-			Packet packet = PacketRegistry.createPacket(from, tag);			
+			Packet packet = PacketRegistry.createPacket(from, tag);
 			if (packet != null) {
-				if(packet.getID() == 0) { //Always handle login packet
+				if (packet.getID() == 0) { // Always handle login packet
 					packet.handle();
-				} else if(from.verified) { //Only handle non login packets when connection is verified.
-					if(packet instanceof IRelayble) {
-						if(((IRelayble) packet).shouldRelay()) { //Should relay the message not handle it
+				} else if (from.verified) { // Only handle non login packets
+											// when connection is verified.
+					if (packet instanceof IRelayble) {
+						// System.out.println(((IRelayble) packet).getName());
+						if (((IRelayble) packet).shouldRelay()) { // Should
+																	// relay the
+																	// message
+																	// not
+																	// handle it
 							InstanceServer server = MSM.Instances.get(((IRelayble) packet).getName());
-							if(server != null) {
+							if (server != null) {
 								server.connection.send(packet);
 							}
 							return;

@@ -9,9 +9,9 @@ import org.apache.logging.log4j.Level;
 
 public class PacketConnected extends Packet {
 
-	private boolean	connected;
-	private NBTTagCompound waypoints;
-	private NBTTagCompound instances;
+	private boolean			connected;
+	private NBTTagCompound	waypoints;
+	private NBTTagCompound	instances;
 
 	public PacketConnected(Connection conn, NBTTagCompound tag) {
 		super(conn);
@@ -49,6 +49,7 @@ public class PacketConnected extends Packet {
 		if (this.connected) {
 			MSS.logger.log(Level.INFO, "Connected to Master.");
 			MSS.waypoints = this.waypoints;
+			MSS.instances = this.instances;
 		} else {
 			MSS.logger.log(Level.INFO, "Auth failed.");
 		}

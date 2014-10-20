@@ -1,7 +1,6 @@
 package joris.multiserver.common;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagList;

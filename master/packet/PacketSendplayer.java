@@ -2,20 +2,19 @@ package joris.multiserver.master.packet;
 
 import java.util.List;
 
+import joris.multiserver.common.RelayblePacket;
+import joris.multiserver.common.network.SwitchMessage;
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.master.MSM;
-import joris.multiserver.common.network.SwitchMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import joris.multiserver.common.IRelayble;
-import joris.multiserver.common.RelayblePacket;
 
 public class PacketSendplayer extends RelayblePacket {
 
 	private String	uuid;
-	private String  IP;
+	private String	IP;
 
 	public PacketSendplayer(Connection conn, NBTTagCompound tag) {
 		super(conn, null);
@@ -61,15 +60,4 @@ public class PacketSendplayer extends RelayblePacket {
 		}
 
 	}
-
-	@Override
-	public boolean shouldRelay() {
-		return false;
-	}
-
-	@Override
-	public String getName() {
-		return null;
-	}
-
 }
