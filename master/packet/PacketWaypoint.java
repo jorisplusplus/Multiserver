@@ -4,6 +4,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.master.MSM;
 import joris.multiserver.common.Packet;
+import joris.multiserver.common.RelayblePacket;
 
 public class PacketWaypoint extends Packet {
 	
@@ -42,7 +43,6 @@ public class PacketWaypoint extends Packet {
 
 	@Override
 	public void handle() {
-		System.out.println("test");
 		MSM.waypoints.setTag(this.name, this.waypoint);
 		MSM.Broadcast(this, this.sender);
 		MSM.Saver.storeWaypoints(MSM.waypoints);
