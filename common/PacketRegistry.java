@@ -19,7 +19,7 @@ public class PacketRegistry {
 		}
 	}
 
-	public static Packet createPacket(Connection conn, NBTTagCompound tag) throws Exception {
+	public static Packet createPacket(Connection conn, NBTTagCompound tag) {
 		Class classname = classes.get(tag.getInteger("ID"));
 		if (classname != null) {
 			try {
