@@ -9,21 +9,22 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import joris.multiserver.common.Packet;
+import joris.multiserver.common.IRelayble;
+import joris.multiserver.common.RelayblePacket;
 
-public class PacketSendplayer extends Packet {
+public class PacketSendplayer extends RelayblePacket {
 
 	private String	uuid;
 	private String  IP;
 
 	public PacketSendplayer(Connection conn, NBTTagCompound tag) {
-		super(conn);
+		super(conn, null);
 		this.IP = MSM.ServerDetails;
 		this.loadFromNBT(tag);
 	}
 
-	public PacketSendplayer(String uuid) {
-		super(null);
+	public PacketSendplayer(String uuid, String relay) {
+		super(null, relay);
 		this.uuid = uuid;
 		this.IP = MSM.ServerDetails;
 	}
@@ -59,6 +60,16 @@ public class PacketSendplayer extends Packet {
 			}
 		}
 
+	}
+
+	@Override
+	public boolean shouldRelay() {
+		return false;
+	}
+
+	@Override
+	public String getName() {
+		return null;
 	}
 
 }

@@ -2,27 +2,25 @@ package joris.multiserver.slave.packet;
 
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.slave.MSS;
-import joris.multiserver.common.Packet;
+import joris.multiserver.common.RelayblePacket;
 import joris.multiserver.common.SaveHelper;
 import joris.multiserver.slave.MSS;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class PacketPlayerdata extends Packet {
+public class PacketPlayerdata extends RelayblePacket {
 
 	private NBTTagCompound	player;
 	private String			uuid;
-	private String			relay;
 
 	public PacketPlayerdata(Connection conn, NBTTagCompound tag) {
-		super(conn);
+		super(conn, null);
 		this.loadFromNBT(tag);
 	}
 
 	public PacketPlayerdata(NBTTagCompound player, String uuid, String relay) {
-		super(null);
+		super(null, relay);
 		this.uuid = uuid;
 		this.player = player;
-		this.relay = relay;
 	}
 
 	@Override
@@ -35,7 +33,6 @@ public class PacketPlayerdata extends Packet {
 		super.loadFromNBT(tag);
 		this.uuid = tag.getString("uuid");
 		this.player = (NBTTagCompound) tag.getTag("player");
-		this.relay = tag.getString("relay");
 	}
 
 	@Override
@@ -43,7 +40,6 @@ public class PacketPlayerdata extends Packet {
 		super.safeToNBT(tag);
 		tag.setString("uuid", this.uuid);
 		tag.setTag("player", this.player);
-		tag.setString("relay", this.relay);
 	}
 
 	@Override
@@ -60,6 +56,6 @@ public class PacketPlayerdata extends Packet {
 		} else {
 			MSS.Injectionlist.put(this.uuid, this.player);
 		}
-		this.sendReply(new PacketSendplayer(this.uuid));
+		this.sendReply(new PacketSendplayer(this.uuid, this.senderName));
 	}
 }

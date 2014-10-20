@@ -5,23 +5,23 @@ import joris.multiserver.master.InstanceServer;
 import joris.multiserver.master.MSM;
 import joris.multiserver.common.IRelayble;
 import joris.multiserver.common.PacketRegistry;
+import joris.multiserver.common.RelayblePacket;
 import joris.multiserver.common.SaveHelper;
 import joris.multiserver.common.Packet;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class PacketPlayerdata extends Packet implements IRelayble {
+public class PacketPlayerdata extends RelayblePacket {
 
 	private NBTTagCompound	player;
 	private String			uuid;
-	private String			relay;
 
 	public PacketPlayerdata(Connection conn, NBTTagCompound tag) {
-		super(conn);
+		super(conn, null);
 		this.loadFromNBT(tag);
 	}
 
 	public PacketPlayerdata(NBTTagCompound player, String uuid, String relay) {
-		super(null);
+		super(null, relay);
 		this.uuid = uuid;
 		this.player = player;
 		this.relay = relay;
@@ -62,16 +62,6 @@ public class PacketPlayerdata extends Packet implements IRelayble {
 		} else {
 			MSM.Injectionlist.put(this.uuid, this.player);
 		}
-		this.sendReply(new PacketSendplayer(this.uuid));
-	}
-
-	@Override
-	public boolean shouldRelay() {
-		return !this.relay.equalsIgnoreCase(PacketRegistry.getName());
-	}
-
-	@Override
-	public String getName() {
-		return this.relay;
+		this.sendReply(new PacketSendplayer(this.uuid, this.senderName));
 	}
 }
