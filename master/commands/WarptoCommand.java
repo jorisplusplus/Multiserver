@@ -50,7 +50,7 @@ public class WarptoCommand extends CommandBase {
 						// Waypoint on an instance
 						try {
 							MSM.sendPlayerData(MSM.Instances.get(waypoint.instanceName), player, waypoint.travelData());
-							MSM.scheduleTransfer(player.getUniqueID().toString(), (MSM.Instances.get(waypoint.instanceName).ipPort()));
+							MSM.scheduleTransfer(player.getUniqueID().toString());
 						} catch (IOException e) {
 							e.printStackTrace();
 						}

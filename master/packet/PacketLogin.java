@@ -65,7 +65,6 @@ public class PacketLogin extends Packet {
 			MSM.logger.log(Level.INFO, "Connection verified.");
 			this.sender.verified = true;
 			instance.connection = this.sender;
-			instance.Details = this.Details;
 		} else {
 			Reply.put("Data", false);
 			this.sendReply(new PacketConnected(false));

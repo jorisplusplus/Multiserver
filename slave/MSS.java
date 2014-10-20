@@ -6,8 +6,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import joris.multiserver.jexxus.client.ClientConnection;
+import joris.multiserver.slave.commands.CreateWarpCommand;
 import joris.multiserver.slave.commands.JoinCommand;
 import joris.multiserver.slave.commands.ReconnectCommand;
+import joris.multiserver.slave.commands.WarptoCommand;
 import joris.multiserver.common.network.SwitchMessage;
 import joris.multiserver.slave.packet.PacketConnected;
 import joris.multiserver.slave.packet.PacketLogin;
@@ -18,6 +20,7 @@ import joris.multiserver.slave.packet.PacketReqstats;
 import joris.multiserver.slave.packet.PacketSendplayer;
 import joris.multiserver.slave.packet.PacketStats;
 import joris.multiserver.slave.packet.PacketText;
+import joris.multiserver.slave.packet.PacketWaypoint;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -57,7 +60,7 @@ public class MSS {
 	public static String							Name;
 	public static String							Password;
 	public static HashMap<String, NBTTagCompound>	Injectionlist	= new HashMap();
-	public static HashMap<String, String>			Scheduled		= new HashMap();
+	public static HashMap<String, Boolean>			Scheduled		= new HashMap();
 	public static ArrayList<String>					Sync			= new ArrayList();
 	public static SaveHelper						Saver;	
 	public static NBTTagCompound					waypoints;
@@ -82,6 +85,7 @@ public class MSS {
 		PacketRegistry.register(PacketPlayerdata.class, 4);
 		PacketRegistry.register(PacketSendplayer.class, 5);
 		PacketRegistry.register(PacketStats.class, 6);
+		PacketRegistry.register(PacketWaypoint.class, 7);
 	}
 
 	private void loadConfig(Configuration config) {
@@ -106,6 +110,8 @@ public class MSS {
 		FMLCommonHandler.instance().bus().register(events);
 		event.registerServerCommand(new JoinCommand());
 		event.registerServerCommand(new ReconnectCommand());
+		event.registerServerCommand(new WarptoCommand());
+		event.registerServerCommand(new CreateWarpCommand());
 		Listener = new TCPListener();
 		TCPClient = new ClientConnection(Listener, IP, PORT, false);
 		MSS.connect();
@@ -140,17 +146,17 @@ public class MSS {
 
 	public static void sendPlayerDataAndReconnect(EntityPlayerMP player, String instanceName) throws IOException {
 		sendPlayerData(player, null, instanceName);
-		scheduleTransfer(player.getUniqueID().toString(), instances.getString(instanceName));
+		scheduleTransfer(player.getUniqueID().toString());
 	}
 
-	public static void scheduleTransfer(String uniqueID, String target) {
-		Scheduled.put(uniqueID, target);
+	public static void scheduleTransfer(String uniqueID) {
+		Scheduled.put(uniqueID, true);
 	}
 
-	public static String shouldTransfer(String uniqueID) {
-		String target = Scheduled.get(uniqueID);
-		Scheduled.remove(uniqueID);
-		return target;
+	public static Boolean shouldTransfer(String uniqueID) {
+		Boolean target = Scheduled.get(uniqueID);
+		if(target != null) return target;
+		return false;
 	}
 
 	public static void connect() {

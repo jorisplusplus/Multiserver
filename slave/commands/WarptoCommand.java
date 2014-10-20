@@ -46,7 +46,12 @@ public class WarptoCommand extends CommandBase {
 						}
 						player.playerNetServerHandler.setPlayerLocation(waypoint.x + 0.5, waypoint.y, waypoint.z + 0.5, player.rotationYaw, player.rotationPitch);
 					} else {
-						
+						try {
+							MSS.sendPlayerData(player, waypoint.travelData(), waypoint.instanceName);
+							MSS.scheduleTransfer(player.getUniqueID().toString());
+						} catch (IOException e) {
+							e.printStackTrace();
+						}						
 					}
 				} else {
 					sender.addChatMessage(new ChatComponentText("Waypoint not found"));

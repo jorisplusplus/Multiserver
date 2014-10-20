@@ -15,15 +15,18 @@ import net.minecraft.server.MinecraftServer;
 public class PacketSendplayer extends Packet {
 
 	private String	uuid;
+	private String  IP;
 
 	public PacketSendplayer(Connection conn, NBTTagCompound tag) {
 		super(conn);
+		this.IP = MSS.ServerDetails;
 		this.loadFromNBT(tag);
 	}
 
 	public PacketSendplayer(String uuid) {
 		super(null);
 		this.uuid = uuid;
+		this.IP = MSS.ServerDetails;
 	}
 
 	@Override
@@ -35,22 +38,24 @@ public class PacketSendplayer extends Packet {
 	public void loadFromNBT(NBTTagCompound tag) {
 		super.loadFromNBT(tag);
 		this.uuid = tag.getString("uuid");
+		this.IP = tag.getString("IP");
 	}
 
 	@Override
 	public void safeToNBT(NBTTagCompound tag) {
 		super.safeToNBT(tag);
 		tag.setString("uuid", this.uuid);
+		tag.setString("IP", this.IP);
 	}
 
 	@Override
 	public void handle() {
-		String target = MSS.shouldTransfer(this.uuid);
-		if (target != null) {
+		if (MSS.shouldTransfer(this.uuid)) {
 			List<EntityPlayer> playerList = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
 			for (EntityPlayer player : playerList) {
 				if (player.getUniqueID().toString().equals(this.uuid)) {
-					MSS.network.sendTo(new SwitchMessage(target), (EntityPlayerMP) player);
+					MSS.network.sendTo(new SwitchMessage(this.IP), (EntityPlayerMP) player);
+					return;
 				}
 			}
 		}

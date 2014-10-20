@@ -19,7 +19,7 @@ public class PacketRegistry {
 		}
 	}
 
-	public static Packet createPacket(Connection conn, NBTTagCompound tag) {
+	public static Packet createPacket(Connection conn, NBTTagCompound tag) throws Exception {
 		Class classname = classes.get(tag.getInteger("ID"));
 		if (classname != null) {
 			try {
@@ -28,6 +28,8 @@ public class PacketRegistry {
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 				e.printStackTrace();
 			}
+		} else {
+			System.out.println("ID not found");
 		}
 		return null;
 	}

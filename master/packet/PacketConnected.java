@@ -29,7 +29,7 @@ public class PacketConnected extends Packet {
 		    while (it.hasNext()) {
 		        Map.Entry pairs = (Map.Entry)it.next();
 		        System.out.println(pairs.getKey() + " = " + pairs.getValue());
-		        this.instances.setString((String) pairs.getKey(), ((InstanceServer) pairs.getValue()).Details);
+		        this.instances.setBoolean((String) pairs.getKey(), ((InstanceServer) pairs.getValue()).isConnected());
 		    }
 	}
 

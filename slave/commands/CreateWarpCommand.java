@@ -1,11 +1,11 @@
-package joris.multiserver.master.commands;
+package joris.multiserver.slave.commands;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import joris.multiserver.common.Waypoint;
-import joris.multiserver.master.MSM;
-import joris.multiserver.master.packet.PacketWaypoint;
+import joris.multiserver.slave.MSS;
+import joris.multiserver.slave.packet.PacketWaypoint;
 
 public class CreateWarpCommand extends CommandBase {
 
@@ -24,10 +24,9 @@ public class CreateWarpCommand extends CommandBase {
 		if (sender instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP) sender;
 			if (para.length == 1) { // <name>
-				Waypoint waypoint = new Waypoint(player, "master");
-				MSM.waypoints.setTag(para[0], waypoint.storeToNBT());
-				MSM.Saver.storeWaypoints(MSM.waypoints);
-				MSM.Broadcast(new PacketWaypoint(para[0], waypoint.storeToNBT()));
+				Waypoint waypoint = new Waypoint(player, MSS.Name);
+				MSS.waypoints.setTag(para[0], waypoint.storeToNBT());
+				MSS.TCPClient.send(new PacketWaypoint(para[0], waypoint.storeToNBT()));
 			} 
 		}
 	}

@@ -6,7 +6,6 @@ public class InstanceServer {
 
 	public String		name;
 	public String		password;
-	public String		Details;
 	public Connection	connection;
 	public Integer		numberPlayers;
 
@@ -62,9 +61,5 @@ public class InstanceServer {
 			return "Live";
 		}
 		return "Not live";
-	}
-
-	public String ipPort() {
-		return this.Details;
 	}
 }

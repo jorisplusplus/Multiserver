@@ -23,8 +23,10 @@ import joris.multiserver.master.packet.PacketReqstats;
 import joris.multiserver.master.packet.PacketSendplayer;
 import joris.multiserver.master.packet.PacketStats;
 import joris.multiserver.master.packet.PacketText;
+import joris.multiserver.master.packet.PacketWaypoint;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
@@ -49,13 +51,15 @@ public class MSM {
 
 	public static final String						MODID			= "MultiServer";
 	public static final String						VERSION			= "1.0";
+	public static String							ServerDetails;
+	public static String							ServerIP;
 	public static Logger							logger;
 	public static Server							serverTcp;
 	public static TCPListener						Listener;
 	public static ArrayList<String>					Sync			= new ArrayList(); //What nbt tags should be synced
 	public static HashMap<String, InstanceServer>	Instances		= new HashMap(); //All instances (even not) connected
 	public static HashMap<String, NBTTagCompound>	Injectionlist	= new HashMap(); //Data that should be injected on login player
-	public static HashMap<String, String>			Scheduled		= new HashMap(); //List of players that should be send when the server is ready
+	public static HashMap<String, Boolean>			Scheduled		= new HashMap(); //List of players that should be send when the server is ready
 	public static SimpleNetworkWrapper				network;
 	public static NBTTagCompound					waypoints		= new NBTTagCompound();
 	public static int								PORT;
@@ -74,6 +78,7 @@ public class MSM {
 	private void loadConfig(Configuration config) {
 		config.load();
 		PORT = config.get(Configuration.CATEGORY_GENERAL, "Port", 25566).getInt();
+		ServerIP = config.get(Configuration.CATEGORY_GENERAL, "Server_IP", "127.0.0.1").getString();
 		TickDelay = config.getInt(Configuration.CATEGORY_GENERAL, "TicksBetweenUpdate", 1200, 20, 6000, "Update frequency of the instance stats");
 		Sync = new ArrayList<String>(Arrays.asList(config.getStringList("Synclist", Configuration.CATEGORY_GENERAL, new String[] { "Inventory", "EnderItems" }, "What playerdata should be synced. NBT tag names")));
 		String[] configInstances = config.get(Configuration.CATEGORY_GENERAL, "Instances", new String[] { "name", "password" }, "Whitelist your instances here format: Name newline Password").getStringList();
@@ -108,6 +113,7 @@ public class MSM {
 		PacketRegistry.register(PacketPlayerdata.class, 4);
 		PacketRegistry.register(PacketSendplayer.class, 5);
 		PacketRegistry.register(PacketStats.class, 6);
+		PacketRegistry.register(PacketWaypoint.class, 7);
 	}
 
 	/**
@@ -131,6 +137,7 @@ public class MSM {
 		event.registerServerCommand(new InstancesCommand());
 		event.registerServerCommand(new WarptoCommand());
 		event.registerServerCommand(new CreateWarpCommand());
+		ServerDetails = ServerIP + ":" + MinecraftServer.getServer().getPort();
 	}
 
 	/**
@@ -165,10 +172,10 @@ public class MSM {
 	 * Schedule player to transfer to a server name
 	 *
 	 * @param uniqueID player UUID
-	 * @param target server name
+	 * @param b server name
 	 */
-	public static void scheduleTransfer(String uniqueID, String target) {
-		Scheduled.put(uniqueID, target);
+	public static void scheduleTransfer(String uniqueID) {
+		Scheduled.put(uniqueID, true);
 	}
 
 	/**
@@ -209,7 +216,7 @@ public class MSM {
 	 */
 	public static void sendPlayerDataAndReconnect(InstanceServer server, EntityPlayerMP player) throws IOException {
 		sendPlayerData(server, player, null);
-		scheduleTransfer(player.getUniqueID().toString(), server.Details);
+		scheduleTransfer(player.getUniqueID().toString());
 	}
 
 	/**
@@ -219,10 +226,10 @@ public class MSM {
 	 * @param uniqueID
 	 * @return Returns to what server the player should connect null if not.
 	 */
-	public static String shouldTransfer(String uniqueID) {
-		String target = Scheduled.get(uniqueID);
-		Scheduled.remove(uniqueID);
-		return target;
+	public static Boolean shouldTransfer(String uniqueID) {
+		Boolean target = Scheduled.get(uniqueID);
+		if(target != null) return target;
+		return false;
 	}
 
 	/**

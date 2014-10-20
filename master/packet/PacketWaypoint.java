@@ -42,6 +42,7 @@ public class PacketWaypoint extends Packet {
 
 	@Override
 	public void handle() {
+		System.out.println("test");
 		MSM.waypoints.setTag(this.name, this.waypoint);
 		MSM.Broadcast(this, this.sender);
 		MSM.Saver.storeWaypoints(MSM.waypoints);
