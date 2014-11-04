@@ -7,13 +7,14 @@ import joris.multiserver.common.PacketRegistry;
 import joris.multiserver.common.SaveHelper;
 import joris.multiserver.common.network.SwitchMessage;
 import joris.multiserver.jexxus.client.ClientConnection;
-import joris.multiserver.slave.commands.CreateWarpCommand;
+import joris.multiserver.slave.commands.WarpCommand;
 import joris.multiserver.slave.commands.JoinCommand;
 import joris.multiserver.slave.commands.ReconnectCommand;
 import joris.multiserver.slave.commands.WarptoCommand;
 import joris.multiserver.slave.packet.PacketConnected;
 import joris.multiserver.slave.packet.PacketLogin;
 import joris.multiserver.slave.packet.PacketPlayerdata;
+import joris.multiserver.slave.packet.PacketRemoveWaypoint;
 import joris.multiserver.slave.packet.PacketReqstats;
 import joris.multiserver.slave.packet.PacketSendplayer;
 import joris.multiserver.slave.packet.PacketStats;
@@ -82,6 +83,7 @@ public class MSS {
 		PacketRegistry.register(PacketSendplayer.class, 5);
 		PacketRegistry.register(PacketStats.class, 6);
 		PacketRegistry.register(PacketWaypoint.class, 7);
+		PacketRegistry.register(PacketRemoveWaypoint.class, 8);
 	}
 
 	private void loadConfig(Configuration config) {
@@ -107,7 +109,7 @@ public class MSS {
 		event.registerServerCommand(new JoinCommand());
 		event.registerServerCommand(new ReconnectCommand());
 		event.registerServerCommand(new WarptoCommand());
-		event.registerServerCommand(new CreateWarpCommand());
+		event.registerServerCommand(new WarpCommand());
 		Listener = new TCPListener();
 		TCPClient = new ClientConnection(Listener, IP, PORT, false);
 		MSS.connect();

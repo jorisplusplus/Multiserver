@@ -11,13 +11,14 @@ import joris.multiserver.common.SaveHelper;
 import joris.multiserver.common.network.SwitchMessage;
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.jexxus.server.Server;
-import joris.multiserver.master.commands.CreateWarpCommand;
 import joris.multiserver.master.commands.InstancesCommand;
 import joris.multiserver.master.commands.JoinCommand;
+import joris.multiserver.master.commands.WarpCommand;
 import joris.multiserver.master.commands.WarptoCommand;
 import joris.multiserver.master.packet.PacketConnected;
 import joris.multiserver.master.packet.PacketLogin;
 import joris.multiserver.master.packet.PacketPlayerdata;
+import joris.multiserver.master.packet.PacketRemoveWaypoint;
 import joris.multiserver.master.packet.PacketReqstats;
 import joris.multiserver.master.packet.PacketSendplayer;
 import joris.multiserver.master.packet.PacketStats;
@@ -54,37 +55,10 @@ public class MSM {
 	public static Logger							logger;
 	public static Server							serverTcp;
 	public static TCPListener						Listener;
-	public static String[]							Sync;									// What
-																							// nbt
-																							// tags
-																							// should
-																							// be
-																							// synced
-	public static HashMap<String, InstanceServer>	Instances		= new HashMap();		// All
-																							// instances
-																							// (even
-																							// not)
-																							// connected
-	public static HashMap<String, NBTTagCompound>	Injectionlist	= new HashMap();		// Data
-																							// that
-																							// should
-																							// be
-																							// injected
-																							// on
-																							// login
-																							// player
-	public static HashMap<String, Boolean>			Scheduled		= new HashMap();		// List
-																							// of
-																							// players
-																							// that
-																							// should
-																							// be
-																							// send
-																							// when
-																							// the
-																							// server
-																							// is
-																							// ready
+	public static String[]							Sync;									// What nbt tags should be synced
+	public static HashMap<String, InstanceServer>	Instances		= new HashMap();		// All instances (even not) connected
+	public static HashMap<String, NBTTagCompound>	Injectionlist	= new HashMap();		// Data that should be injected on login player
+	public static HashMap<String, Boolean>			Scheduled		= new HashMap();		// List of players that should be send when the server is ready
 	public static SimpleNetworkWrapper				network;
 	public static NBTTagCompound					waypoints		= new NBTTagCompound();
 	public static int								PORT;
@@ -139,6 +113,7 @@ public class MSM {
 		PacketRegistry.register(PacketSendplayer.class, 5);
 		PacketRegistry.register(PacketStats.class, 6);
 		PacketRegistry.register(PacketWaypoint.class, 7);
+		PacketRegistry.register(PacketRemoveWaypoint.class, 8);
 	}
 
 	/**
@@ -161,7 +136,7 @@ public class MSM {
 		event.registerServerCommand(new JoinCommand());
 		event.registerServerCommand(new InstancesCommand());
 		event.registerServerCommand(new WarptoCommand());
-		event.registerServerCommand(new CreateWarpCommand());
+		event.registerServerCommand(new WarpCommand());
 		ServerDetails = ServerIP + ":" + MinecraftServer.getServer().getPort();
 	}
 
@@ -205,16 +180,7 @@ public class MSM {
 		Scheduled.put(uniqueID, true);
 	}
 
-	/**
-	 * Copy all nbttags listed in the config file.
-	 *
-	 * @param server
-	 *            Target server
-	 * @param player
-	 *            Target player
-	 * @throws IOException
-	 */
-	public static void sendPlayerData(InstanceServer server, EntityPlayerMP player, NBTTagCompound additional) throws IOException {
+	public static void sendPlayerData(Connection conn, String name, EntityPlayerMP player, NBTTagCompound additional) {
 		NBTTagCompound data = new NBTTagCompound();
 		player.writeToNBT(data);
 		NBTTagCompound transfer = new NBTTagCompound();
@@ -233,7 +199,20 @@ public class MSM {
 				transfer.setTag((String) key, additional.getTag((String) key));
 			}
 		}
-		server.connection.send(new PacketPlayerdata(transfer, player.getUniqueID().toString(), server.name));
+		conn.send(new PacketPlayerdata(transfer, player.getUniqueID().toString(), name));
+	}
+
+	/**
+	 * Copy all nbttags listed in the config file.
+	 *
+	 * @param server
+	 *            Target server
+	 * @param player
+	 *            Target player
+	 * @throws IOException
+	 */
+	public static void sendPlayerData(InstanceServer server, EntityPlayerMP player, NBTTagCompound additional) throws IOException {
+		sendPlayerData(server.connection, server.name, player, additional);
 	}
 
 	/**
@@ -265,7 +244,7 @@ public class MSM {
 
 	/**
 	 * Broadcast a packet to all connected slaves.
-	 * 
+	 *
 	 * @param packet
 	 */
 	public static void Broadcast(Packet packet) {
@@ -279,6 +258,12 @@ public class MSM {
 		}
 	}
 
+	/**
+	 * Broadcast a packet to all connected slaves with a exclusion.
+	 *
+	 * @param packet Broadcast this packet
+	 * @param exlude dont send it to this connection
+	 */
 	public static void Broadcast(Packet packet, Connection exlude) {
 		Iterator it = MSM.Instances.entrySet().iterator();
 		while (it.hasNext()) {

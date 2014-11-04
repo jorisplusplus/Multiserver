@@ -47,14 +47,14 @@ public class TCPListener implements ConnectionListener {
 				if (packet.getID() == 0) { // Always handle login packet
 					packet.handle();
 				} else if (from.verified) { // Only handle non login packets
-											// when connection is verified.
+					// when connection is verified.
 					if (packet instanceof IRelayble) {
 						// System.out.println(((IRelayble) packet).getName());
 						if (((IRelayble) packet).shouldRelay()) { // Should
-																	// relay the
-																	// message
-																	// not
-																	// handle it
+							// relay the
+							// message
+							// not
+							// handle it
 							InstanceServer server = MSM.Instances.get(((IRelayble) packet).getName());
 							if (server != null) {
 								server.connection.send(packet);

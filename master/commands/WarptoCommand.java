@@ -65,6 +65,5 @@ public class WarptoCommand extends CommandBase {
 		} else {
 			sender.addChatMessage(new ChatComponentText("Player only command"));
 		}
-
 	}
 }
