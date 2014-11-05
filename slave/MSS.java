@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import joris.multiserver.common.PacketRegistry;
 import joris.multiserver.common.SaveHelper;
+import joris.multiserver.common.network.CheckMod;
 import joris.multiserver.common.network.SwitchMessage;
 import joris.multiserver.jexxus.client.ClientConnection;
 import joris.multiserver.slave.commands.WarpCommand;
@@ -73,6 +74,7 @@ public class MSS {
 		logger.log(Level.INFO, "Starting multiserver master...");
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 		network.registerMessage(SwitchMessage.Handler.class, SwitchMessage.class, 0, Side.SERVER);
+		network.registerMessage(CheckMod.Handler.class, CheckMod.class, 1, Side.SERVER);
 		this.loadConfig(new Configuration(event.getSuggestedConfigurationFile()));
 		PacketRegistry.setName(Name);
 		PacketRegistry.register(PacketLogin.class, 0);

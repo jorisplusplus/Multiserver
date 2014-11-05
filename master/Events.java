@@ -1,9 +1,11 @@
 package joris.multiserver.master;
 
+import joris.multiserver.common.network.CheckMod;
 import joris.multiserver.master.packet.PacketReqstats;
 import joris.multiserver.master.packet.PacketText;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraft.entity.player.EntityPlayerMP;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
@@ -42,6 +44,7 @@ public class Events {
 	 */
 	@SubscribeEvent
 	public void PlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
+		MSM.network.sendTo(new CheckMod("Server"), (EntityPlayerMP) event.player);
 		if (MSM.Injectionlist.containsKey(event.player.getUniqueID().toString())) {
 			NBTTagCompound data = MSM.Injectionlist.get((event.player.getUniqueID().toString()));
 			NBTTagCompound player = new NBTTagCompound();

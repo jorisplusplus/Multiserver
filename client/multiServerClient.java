@@ -2,6 +2,7 @@ package joris.multiserver.client;
 
 import java.util.ArrayList;
 
+import joris.multiserver.client.network.CheckMod;
 import joris.multiserver.client.network.SwitchMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -46,10 +47,10 @@ public class multiServerClient
     	multiServerLogger = LogManager.getLogger("MultiServer");
     	network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
     	network.registerMessage(SwitchMessage.Handler.class, SwitchMessage.class, 0, Side.CLIENT);
-        Handler handlers = new Handler();
+        network.registerMessage(CheckMod.Handler.class, CheckMod.class, 1, Side.CLIENT);
+    	Handler handlers = new Handler();
         MinecraftForge.EVENT_BUS.register( handlers );
         FMLCommonHandler.instance().bus().register( handlers );
-
-    	
+        multiServerLogger.log(Level.INFO, Minecraft.getMinecraft().getSession().getPlayerID());
     }
 }

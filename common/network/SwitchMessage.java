@@ -36,7 +36,6 @@ public class SwitchMessage implements IMessage {
 	@Override
 	public void toBytes(ByteBuf buf) {
 		ByteBufUtils.writeUTF8String(buf, this.IP);
-
 	}
 
 }

@@ -2,6 +2,7 @@ package joris.multiserver.slave;
 
 import java.io.IOException;
 
+import joris.multiserver.common.network.CheckMod;
 import joris.multiserver.slave.packet.PacketStats;
 import joris.multiserver.slave.packet.PacketText;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -36,6 +37,7 @@ public class Events {
 
 	@SubscribeEvent
 	public void PlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
+		MSS.network.sendTo(new CheckMod("Server"), (EntityPlayerMP) event.player);
 		MSS.TCPClient.send(new PacketStats(MinecraftServer.getServer().getCurrentPlayerCount()));
 		// Injection data part
 		if (MSS.Injectionlist.containsKey(event.player.getUniqueID().toString())) {
