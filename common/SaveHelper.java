@@ -42,9 +42,10 @@ public class SaveHelper {
 
 			File file1 = new File(this.playersDirectory, UniqueID + ".dat.tmp");
 			File file2 = new File(this.playersDirectory, UniqueID + ".dat");
+			File file3 = new File(this.playersDirectory, UniqueID + ".dat.backup");
 			CompressedStreamTools.writeCompressed(nbttagcompound, new FileOutputStream(file1));
 			if (file2.exists()) {
-				file2.delete();
+				file2.renameTo(file3);
 			}
 			file1.renameTo(file2);
 		} catch (Exception exception) {
