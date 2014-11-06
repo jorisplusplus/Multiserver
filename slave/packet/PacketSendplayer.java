@@ -3,6 +3,7 @@ package joris.multiserver.slave.packet;
 import java.util.List;
 
 import joris.multiserver.common.RelayblePacket;
+import joris.multiserver.common.network.CheckMod;
 import joris.multiserver.common.network.SwitchMessage;
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.slave.MSS;
@@ -10,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
 
 public class PacketSendplayer extends RelayblePacket {
 
@@ -54,7 +56,11 @@ public class PacketSendplayer extends RelayblePacket {
 			List<EntityPlayer> playerList = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
 			for (EntityPlayer player : playerList) {
 				if (player.getUniqueID().toString().equals(this.uuid)) {
-					MSS.network.sendTo(new SwitchMessage(this.IP), (EntityPlayerMP) player);
+					if(CheckMod.PlayerHasMod(player.getCommandSenderName())) {
+						MSS.network.sendTo(new SwitchMessage(this.IP), (EntityPlayerMP) player);
+					} else {
+						player.addChatComponentMessage(new ChatComponentText("You don't have the multiserver client mod. Join this server: "+this.IP));
+					}
 					return;
 				}
 			}

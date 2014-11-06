@@ -1,9 +1,13 @@
 package joris.multiserver.slave.packet;
 
+import java.util.List;
+
 import joris.multiserver.common.RelayblePacket;
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.slave.MSS;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 
 public class PacketPlayerdata extends RelayblePacket {
 
@@ -42,18 +46,42 @@ public class PacketPlayerdata extends RelayblePacket {
 
 	@Override
 	public void handle() {
-		NBTTagCompound save = MSS.Saver.readPlayerData(this.uuid);
-		if (save != null) {
+		EntityPlayer livePlayer = playerOnline(this.uuid);
+		if(livePlayer != null) {
+			NBTTagCompound source = new NBTTagCompound();
+			livePlayer.writeToNBT(source);
 			for (Object key : this.player.func_150296_c()) {
-				if (save.hasKey((String) key)) {
-					save.removeTag((String) key);
+				if (source.hasKey((String) key)) {
+					source.removeTag((String) key);
 				}
-				save.setTag((String) key, this.player.getTag((String) key));
+				source.setTag((String) key, this.player.getTag((String) key));
 			}
-			MSS.Saver.storePlayerData(this.uuid, save);
+			livePlayer.readFromNBT(source);
 		} else {
-			MSS.Injectionlist.put(this.uuid, this.player);
+			NBTTagCompound save = MSS.Saver.readPlayerData(this.uuid);
+			if (save != null) {
+				for (Object key : this.player.func_150296_c()) {
+					if (save.hasKey((String) key)) {
+						save.removeTag((String) key);
+					}
+					save.setTag((String) key, this.player.getTag((String) key));
+				}
+				MSS.Saver.storePlayerData(this.uuid, save);
+			} else {
+				MSS.Injectionlist.put(this.uuid, this.player);
+			}
+			this.sendReply(new PacketSendplayer(this.uuid, this.senderName));
 		}
-		this.sendReply(new PacketSendplayer(this.uuid, this.senderName));
 	}
+	
+	private EntityPlayer playerOnline(String uuid) {
+		List<EntityPlayer> playerList = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+		for (EntityPlayer player : playerList) {
+			if (player.getUniqueID().toString().equals(this.uuid)) {
+				return player;
+			}
+		}
+		return null;
+	}
+	
 }

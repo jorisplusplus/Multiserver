@@ -16,6 +16,7 @@ import joris.multiserver.slave.packet.PacketConnected;
 import joris.multiserver.slave.packet.PacketLogin;
 import joris.multiserver.slave.packet.PacketPlayerdata;
 import joris.multiserver.slave.packet.PacketRemoveWaypoint;
+import joris.multiserver.slave.packet.PacketReqData;
 import joris.multiserver.slave.packet.PacketReqstats;
 import joris.multiserver.slave.packet.PacketSendplayer;
 import joris.multiserver.slave.packet.PacketStats;
@@ -86,6 +87,7 @@ public class MSS {
 		PacketRegistry.register(PacketStats.class, 6);
 		PacketRegistry.register(PacketWaypoint.class, 7);
 		PacketRegistry.register(PacketRemoveWaypoint.class, 8);
+		PacketRegistry.register(PacketReqData.class, 9);
 	}
 
 	private void loadConfig(Configuration config) {

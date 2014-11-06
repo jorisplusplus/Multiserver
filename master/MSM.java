@@ -20,6 +20,7 @@ import joris.multiserver.master.packet.PacketConnected;
 import joris.multiserver.master.packet.PacketLogin;
 import joris.multiserver.master.packet.PacketPlayerdata;
 import joris.multiserver.master.packet.PacketRemoveWaypoint;
+import joris.multiserver.master.packet.PacketReqData;
 import joris.multiserver.master.packet.PacketReqstats;
 import joris.multiserver.master.packet.PacketSendplayer;
 import joris.multiserver.master.packet.PacketStats;
@@ -116,6 +117,7 @@ public class MSM {
 		PacketRegistry.register(PacketStats.class, 6);
 		PacketRegistry.register(PacketWaypoint.class, 7);
 		PacketRegistry.register(PacketRemoveWaypoint.class, 8);
+		PacketRegistry.register(PacketReqData.class, 9);
 	}
 
 	/**

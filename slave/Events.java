@@ -3,6 +3,7 @@ package joris.multiserver.slave;
 import java.io.IOException;
 
 import joris.multiserver.common.network.CheckMod;
+import joris.multiserver.slave.packet.PacketReqData;
 import joris.multiserver.slave.packet.PacketStats;
 import joris.multiserver.slave.packet.PacketText;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -51,6 +52,8 @@ public class Events {
 				player.setTag((String) key, data.getTag((String) key));
 			}
 			event.player.readFromNBT(player);
+		} else {
+			MSS.TCPClient.send(new PacketReqData(event.player.getUniqueID().toString()));
 		}
 	}
 
