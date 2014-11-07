@@ -8,14 +8,18 @@ import joris.multiserver.common.PacketRegistry;
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.jexxus.common.ConnectionListener;
 import joris.multiserver.jexxus.server.ServerConnection;
+import joris.multiserver.slave.commands.Reconnector;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
 
 public class TCPListener implements ConnectionListener {
 
 	@Override
 	public void connectionBroken(Connection broken, boolean forced) {
-
+		MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentText("[Server] Attention, master server went offline. Please stay connected until master server is back up."));
+		new Reconnector();
 	}
 
 	/**
@@ -38,6 +42,6 @@ public class TCPListener implements ConnectionListener {
 
 	@Override
 	public void clientConnected(ServerConnection conn) {
-
+		MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentText("[Server]Master server connection established."));
 	}
 }

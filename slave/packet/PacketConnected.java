@@ -4,6 +4,8 @@ import joris.multiserver.common.Packet;
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.slave.MSS;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
 
 import org.apache.logging.log4j.Level;
 
@@ -48,6 +50,7 @@ public class PacketConnected extends Packet {
 	public void handle() {
 		if (this.connected) {
 			MSS.logger.log(Level.INFO, "Connected to Master.");
+			MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentText("[Server] Master server connection established."));
 			MSS.waypoints = this.waypoints;
 			MSS.instances = this.instances;
 		} else {

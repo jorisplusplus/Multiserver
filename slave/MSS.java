@@ -25,6 +25,7 @@ import joris.multiserver.slave.packet.PacketWaypoint;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
@@ -167,11 +168,9 @@ public class MSS {
 		try {
 			TCPClient.connect();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		if (TCPClient.isConnected()) {
-			logger.log(Level.INFO, "Logging in on master server.");
+			logger.log(Level.INFO, "Logging in on master server.");			
 			TCPClient.send(new PacketLogin(Password, Name, ServerDetails));
 		} else {
 			logger.log(Level.INFO, "Can't connect to master server.");
