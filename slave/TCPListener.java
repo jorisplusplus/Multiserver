@@ -8,7 +8,6 @@ import joris.multiserver.common.PacketRegistry;
 import joris.multiserver.jexxus.common.Connection;
 import joris.multiserver.jexxus.common.ConnectionListener;
 import joris.multiserver.jexxus.server.ServerConnection;
-import joris.multiserver.slave.commands.Reconnector;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
