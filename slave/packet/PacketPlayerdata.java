@@ -58,18 +58,7 @@ public class PacketPlayerdata extends RelayblePacket {
 			}
 			livePlayer.readFromNBT(source);
 		} else {
-			NBTTagCompound save = MSS.Saver.readPlayerData(this.uuid);
-			if (save != null) {
-				for (Object key : this.player.func_150296_c()) {
-					if (save.hasKey((String) key)) {
-						save.removeTag((String) key);
-					}
-					save.setTag((String) key, this.player.getTag((String) key));
-				}
-				MSS.Saver.storePlayerData(this.uuid, save);
-			} else {
-				MSS.Injectionlist.put(this.uuid, this.player);
-			}
+			MSS.Injectionlist.put(this.uuid, this.player);
 			this.sendReply(new PacketSendplayer(this.uuid, this.senderName));
 		}
 	}
