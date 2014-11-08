@@ -1,6 +1,9 @@
 package joris.multiserver.slave;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import org.apache.logging.log4j.Level;
 
 import joris.multiserver.common.network.CheckMod;
 import joris.multiserver.slave.packet.PacketReqData;
@@ -15,7 +18,8 @@ import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 
 public class Events {
-	Integer	ticks	= 0;
+	private Integer	ticks	= 0;
+	public static ArrayList <BackupPlayerdata>disconnectedPLayers = new ArrayList();
 
 	@SubscribeEvent
 	public void handleTick(TickEvent.ServerTickEvent clientTickEvent) {
@@ -59,11 +63,15 @@ public class Events {
 
 	@SubscribeEvent
 	public void PlayerLoggedOutEvent(PlayerEvent.PlayerLoggedOutEvent event) {
-		MSS.TCPClient.send(new PacketStats(MinecraftServer.getServer().getCurrentPlayerCount()));
-		try {
-			MSS.sendPlayerData((EntityPlayerMP) event.player, null, "master");
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(MSS.TCPClient.isConnected()) {
+			MSS.TCPClient.send(new PacketStats(MinecraftServer.getServer().getCurrentPlayerCount()));
+			try {
+				MSS.sendPlayerData((EntityPlayerMP) event.player, null, "master");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			this.disconnectedPLayers.add(new BackupPlayerdata(event.player));
 		}
 	}
 }

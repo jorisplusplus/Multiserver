@@ -1,7 +1,11 @@
 package joris.multiserver.slave.packet;
 
+import java.util.ArrayList;
+
 import joris.multiserver.common.Packet;
 import joris.multiserver.jexxus.common.Connection;
+import joris.multiserver.slave.BackupPlayerdata;
+import joris.multiserver.slave.Events;
 import joris.multiserver.slave.MSS;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -53,6 +57,13 @@ public class PacketConnected extends Packet {
 			MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentText("[Server] Master server connection established."));
 			MSS.waypoints = this.waypoints;
 			MSS.instances = this.instances;
+			if(Events.disconnectedPLayers.size() > 0){
+				MSS.logger.log(Level.INFO, "Sending logged out playerdata to master server");
+				for(BackupPlayerdata playerData : Events.disconnectedPLayers) {
+					playerData.sendData();					
+				}
+				Events.disconnectedPLayers.clear(); //All data send, clear list
+			}
 		} else {
 			MSS.logger.log(Level.INFO, "Auth failed.");
 		}
