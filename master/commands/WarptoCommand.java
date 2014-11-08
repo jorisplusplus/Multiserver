@@ -29,6 +29,11 @@ public class WarptoCommand extends CommandBase {
 	public List addTabCompletionOptions(ICommandSender sender, String[] list) {
 		return new ArrayList(MSM.waypoints.func_150296_c());
 	}
+	
+	@Override
+	public boolean canCommandSenderUseCommand(ICommandSender sender) {
+		return true;
+	}
 
 	@Override
 	public void processCommand(ICommandSender sender, String[] para) {
@@ -61,6 +66,8 @@ public class WarptoCommand extends CommandBase {
 				}
 			} else {
 				sender.addChatMessage(new ChatComponentText("No waypoint given"));
+				sender.addChatMessage(new ChatComponentText("Available waypoints:"));
+				sender.addChatMessage(new ChatComponentText(MSM.waypoints.func_150296_c().toString().replace("[", "").replace("]", "")));
 			}
 		} else {
 			sender.addChatMessage(new ChatComponentText("Player only command"));

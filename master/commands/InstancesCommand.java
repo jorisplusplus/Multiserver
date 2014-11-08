@@ -27,7 +27,12 @@ public class InstancesCommand extends CommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender p_71518_1_) {
-		return "/instances <option>";
+		return "/instances <Stats>";
+	}
+	
+	@Override
+	public boolean canCommandSenderUseCommand(ICommandSender sender) {
+		return true;
 	}
 
 	@Override

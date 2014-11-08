@@ -29,6 +29,11 @@ public class WarptoCommand extends CommandBase {
 	public List addTabCompletionOptions(ICommandSender sender, String[] list) {
 		return new ArrayList(MSS.waypoints.func_150296_c());
 	}
+	
+	@Override
+	public boolean canCommandSenderUseCommand(ICommandSender sender) {
+		return true;
+	}
 
 	@Override
 	public void processCommand(ICommandSender sender, String[] para) {
