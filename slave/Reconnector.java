@@ -1,9 +1,7 @@
-package joris.multiserver.slave.commands;
+package joris.multiserver.slave;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-import joris.multiserver.slave.MSS;
 
 public class Reconnector {
 
