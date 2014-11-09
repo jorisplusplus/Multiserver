@@ -80,7 +80,7 @@ public class MSM {
 		config.load();
 		PORT = config.get(Configuration.CATEGORY_GENERAL, "Port", 25566).getInt();
 		ServerIP = config.get(Configuration.CATEGORY_GENERAL, "Server_IP", "127.0.0.1").getString();
-		TickDelay = config.getInt(Configuration.CATEGORY_GENERAL, "TicksBetweenUpdate", 1200, 20, 6000, "Update frequency of the instance stats");
+		TickDelay = config.get(Configuration.CATEGORY_GENERAL, "TicksBetweenUpdate", 1200).getInt();
 		Sync = config.getStringList("Synclist", Configuration.CATEGORY_GENERAL, new String[] { "Inventory", "EnderItems" }, "What playerdata should be synced. NBT tag names");
 		String[] configInstances = config.get(Configuration.CATEGORY_GENERAL, "Instances", new String[] { "name", "password" }, "Whitelist your instances here format: Name newline Password").getStringList();
 		config.save();
