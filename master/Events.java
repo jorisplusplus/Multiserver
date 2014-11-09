@@ -44,7 +44,7 @@ public class Events {
 	 */
 	@SubscribeEvent
 	public void PlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
-		MSM.network.sendTo(new CheckMod("Server"), (EntityPlayerMP) event.player);
+		MSM.network.sendTo(new CheckMod(event.player.getUniqueID().toString()), (EntityPlayerMP) event.player);
 		if (MSM.Injectionlist.containsKey(event.player.getUniqueID().toString())) {
 			NBTTagCompound data = MSM.Injectionlist.get((event.player.getUniqueID().toString()));
 			NBTTagCompound player = new NBTTagCompound();

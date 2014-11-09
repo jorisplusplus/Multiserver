@@ -1,5 +1,6 @@
 package joris.multiserver.client.network;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.helpers.Loader;
 
 import net.minecraft.client.Minecraft;
@@ -37,7 +38,7 @@ public class CheckMod implements IMessage{
 
 		@Override
 		public IMessage onMessage(CheckMod message, MessageContext ctx) {
-			multiServerClient.network.sendToServer(new CheckMod(Minecraft.getMinecraft().getSession().getPlayerID()));
+			multiServerClient.network.sendToServer(new CheckMod(message.name));
 			return null;
 		}
 		

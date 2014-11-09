@@ -55,7 +55,7 @@ public class PacketSendplayer extends RelayblePacket {
 			List<EntityPlayer> playerList = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
 			for (EntityPlayer player : playerList) {
 				if (player.getUniqueID().toString().equals(this.uuid)) {
-					if(CheckMod.PlayerHasMod(player.getCommandSenderName())) {
+					if(CheckMod.PlayerHasMod(this.uuid)) {
 						MSM.network.sendTo(new SwitchMessage(this.IP), (EntityPlayerMP) player);
 					} else {
 						player.addChatComponentMessage(new ChatComponentText("You don't have the multiserver client mod. Join this server: "+this.IP));

@@ -42,7 +42,7 @@ public class Events {
 
 	@SubscribeEvent
 	public void PlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
-		MSS.network.sendTo(new CheckMod("Server"), (EntityPlayerMP) event.player);
+		MSS.network.sendTo(new CheckMod(event.player.getUniqueID().toString()), (EntityPlayerMP) event.player);
 		MSS.TCPClient.send(new PacketStats(MinecraftServer.getServer().getCurrentPlayerCount()));
 		// Injection data part
 		if (MSS.Injectionlist.containsKey(event.player.getUniqueID().toString())) {
