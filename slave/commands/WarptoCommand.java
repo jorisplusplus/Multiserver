@@ -61,6 +61,8 @@ public class WarptoCommand extends CommandBase {
 				}
 			} else {
 				sender.addChatMessage(new ChatComponentText("No waypoint given"));
+				sender.addChatMessage(new ChatComponentText("Available waypoints:"));
+				sender.addChatMessage(new ChatComponentText(MSS.waypoints.func_150296_c().toString().replace("[", "").replace("]", "")));
 			}
 		} else {
 			sender.addChatMessage(new ChatComponentText("Player only command"));
